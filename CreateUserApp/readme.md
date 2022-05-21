@@ -1,0 +1,1 @@
+Application for creation new users from CLI.
