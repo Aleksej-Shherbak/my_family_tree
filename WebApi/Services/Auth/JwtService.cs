@@ -4,7 +4,7 @@ using System.Text;
 using Domains;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using WebApi.Configuration.Options.Models;
+using WebApi.Options.Models;
 
 namespace WebApi.Services.Auth;
 
@@ -23,7 +23,7 @@ public class JwtService
     {
         var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Name, user.UserName),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
         };

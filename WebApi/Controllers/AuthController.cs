@@ -14,20 +14,19 @@ public class AuthController : ControllerBase
     {
         _authService = authService;
     }
-    
+
     [HttpPost("register")]
-    public IActionResult Register(LoginRegisterRequest request)
+    public async Task<IActionResult> Register(RegisterRequest request)
     {
+        await _authService.RegisterAsync(request);
         return Ok();
     }
-    
+
     [HttpPost("login")]
-    public async Task<IActionResult> Login(LoginRegisterRequest request)
-    {
-        var res = await _authService.LoginAsync(request);
-        return Ok(new LoginRegisterResponse
-        {
-            Token = res.Data 
-        });
-    }
+    public async Task<LoginResponse> Login(LoginRequest request) =>
+        await _authService.LoginAsync(request);
+
+    [HttpPost("confirm-account")]
+    public async Task<LoginResponse> ConfirmAccount(ConfirmAccountRequest request)
+        => await _authService.ConfirmEmailAsync(request);
 }

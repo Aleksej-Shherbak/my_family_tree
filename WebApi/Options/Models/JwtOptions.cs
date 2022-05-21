@@ -1,4 +1,4 @@
-namespace WebApi.Configuration.Options.Models;
+namespace WebApi.Options.Models;
 
 public class JwtOptions
 {

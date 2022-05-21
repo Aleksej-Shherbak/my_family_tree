@@ -1,10 +1,10 @@
 using Domains;
+using Email;
 using EntityFramework;
-using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Identity;
-using WebApi.Configuration.Auth;
-using WebApi.Configuration.Options;
+using WebApi.Di.Auth;
 using WebApi.Middlewares;
+using WebApi.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,10 +15,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddOptionsConfiguration(builder.Configuration);
 builder.Services.AddJwtConfiguration(builder.Configuration);
+builder.Services.AddEmailConfiguration(builder.Configuration);
 
-// Database and cache 
 builder.Services.AddStorageConfiguration(builder.Configuration);
-builder.Services.AddAuthConfiguration();
+builder.Services.AddIdentity<User, IdentityRole<int>>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
 
 var app = builder.Build();
 

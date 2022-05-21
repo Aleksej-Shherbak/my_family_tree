@@ -15,8 +15,14 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Domains\Domains.csproj" />
+      <ProjectReference Include="..\Email\Email.csproj" />
       <ProjectReference Include="..\EntityFramework\EntityFramework.csproj" />
       <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+      <ProjectReference Include="..\ServicesInterfaces\ServicesInterfaces.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\AccountConfirmation\ConfirmAccount.cshtml" />
     </ItemGroup>
 
 </Project>

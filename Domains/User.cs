@@ -2,6 +2,6 @@
 
 namespace Domains;
 
-public class User: IdentityUser
+public class User: IdentityUser<int>
 {
 }

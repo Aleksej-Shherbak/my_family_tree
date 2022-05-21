@@ -1,8 +1,8 @@
 using Microsoft.IdentityModel.Tokens;
-using WebApi.Configuration.Options.Models;
+using WebApi.Options.Models;
 using WebApi.Services.Auth;
 
-namespace WebApi.Configuration.Auth;
+namespace WebApi.Di.Auth;
 
 public static class ConfigurationAuthExtensions
 {

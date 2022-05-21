@@ -78,10 +78,17 @@ public class CreateUserService
         {
             _printer.PrintErrorIdentityErrors(res);
         }
-        else
+
+        user.EmailConfirmed = true;
+        
+        res = _userManager.UpdateAsync(user).GetAwaiter().GetResult();
+        
+        if (!res.Succeeded)
         {
-            _printer.PrintSuccess("Success!");
+            _printer.PrintErrorIdentityErrors(res);
         }
+
+        _printer.PrintSuccess("Success!");
     }
 
     private void UpdateUser()
