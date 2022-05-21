@@ -1,4 +1,5 @@
 using Microsoft.IdentityModel.Tokens;
+using WebApi.Configuration.Options.Models;
 using WebApi.Services.Auth;
 
 namespace WebApi.Configuration.Auth;
@@ -8,6 +9,8 @@ public static class ConfigurationAuthExtensions
     public static IServiceCollection AddJwtConfiguration(this IServiceCollection services, IConfiguration configuration)
     {
         const string authScheme = "OAuth";
+        var jwtOptions = configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
+        
         services.AddAuthentication(authScheme)
             .AddJwtBearer(authScheme, options =>
             {
@@ -15,18 +18,17 @@ public static class ConfigurationAuthExtensions
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    /*ValidIssuer = AuthOptions.ISSUER,
-
+                    ValidIssuer = jwtOptions.Issuer,
                     ValidateAudience = true,
-                    ValidAudience = AuthOptions.AUDIENCE,
+                    ValidAudience = jwtOptions.Audience,
                     ValidateLifetime = true,
-                    IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),*/
+                    IssuerSigningKey = JwtService.GetSymmetricSecurityKey(jwtOptions.Secret),
                     ValidateIssuerSigningKey = true,
                 };
             });
 
         services.AddSingleton<JwtService>();
-        services.AddSingleton<AuthService>();
+        services.AddScoped<AuthService>();
         
         return services;
     }

@@ -22,14 +22,20 @@ public class AuthService
     public async Task<BaseServiceResponse<string>> LoginAsync(LoginRegisterRequest loginRegisterRequest)
     {
         var user = await _userManager.FindByEmailAsync(loginRegisterRequest.Email);
-        var result = await _signInManager.PasswordSignInAsync(user, loginRegisterRequest.Password, false, false);
 
-        if (result.Succeeded)
+        if (user == null)
         {
-            var token = _jwtService.GenerateJwtToken(user);
-            return new BaseServiceResponse<string>(token);
+            throw new UnauthorizedAccessException();
         }
 
-        throw new HttpUnauthorizedException();
+        var result = await _signInManager.PasswordSignInAsync(user, loginRegisterRequest.Password, false, false);
+
+        if (!result.Succeeded)
+        {
+            throw new HttpUnauthorizedException();
+        }
+        
+        var token = _jwtService.GenerateJwtToken(user);
+        return new BaseServiceResponse<string>(token);
     }
 }

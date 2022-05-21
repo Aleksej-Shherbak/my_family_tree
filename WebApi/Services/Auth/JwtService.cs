@@ -16,6 +16,8 @@ public class JwtService
     {
         _options = options.Value;
     }
+
+    public static SymmetricSecurityKey GetSymmetricSecurityKey(string secret) => new(Encoding.UTF8.GetBytes(secret));
     
     public string GenerateJwtToken(User user)
     {
@@ -26,8 +28,8 @@ public class JwtService
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.Secret));
-        var signinCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var signinCredentials = new SigningCredentials(GetSymmetricSecurityKey(_options.Secret), 
+            SecurityAlgorithms.HmacSha256);
         
         var token = new JwtSecurityToken(
             _options.Issuer, 
