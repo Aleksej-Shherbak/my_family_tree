@@ -79,7 +79,6 @@ public class AuthService
         }
 
         var res = await _userManager.ConfirmEmailAsync(user, request.Code);
-        // TODO process Remember me 
         if (!res.Succeeded)
         {
             // TODO log identity errors

@@ -18,8 +18,26 @@ public class JwtService
     }
 
     public static SymmetricSecurityKey GetSymmetricSecurityKey(string secret) => new(Encoding.UTF8.GetBytes(secret));
-    
+
     public string GenerateJwtToken(User user)
+    {
+        var userIdentity = BuildUserIdentity(user);
+        var signinCredentials = new SigningCredentials(GetSymmetricSecurityKey(_options.Secret),
+            SecurityAlgorithms.HmacSha256);
+
+        var token = new JwtSecurityToken(
+            issuer: _options.Issuer,
+            audience: _options.Audience,
+            notBefore: DateTime.Now,
+            expires: DateTime.Now.AddMinutes(_options.TokenLifeExpectancyMinutes),
+            claims: userIdentity.Claims,
+            signingCredentials: signinCredentials
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    private ClaimsIdentity BuildUserIdentity(User user)
     {
         var claims = new List<Claim>
         {
@@ -27,19 +45,10 @@ public class JwtService
             new Claim(JwtRegisteredClaimNames.Name, user.UserName),
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
         };
-
-        var signinCredentials = new SigningCredentials(GetSymmetricSecurityKey(_options.Secret), 
-            SecurityAlgorithms.HmacSha256);
+        ClaimsIdentity claimsIdentity =
+            new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                ClaimsIdentity.DefaultRoleClaimType);
         
-        var token = new JwtSecurityToken(
-            _options.Issuer, 
-            _options.Audience,
-            notBefore: DateTime.Now, 
-            expires: DateTime.Now.AddMinutes(_options.TokenLifeExpectancyMinutes),
-            claims: claims,
-            signingCredentials: signinCredentials
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        return claimsIdentity;
     }
 }
