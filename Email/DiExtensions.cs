@@ -28,6 +28,8 @@ public static class DiExtensions
                 Server = smtpSettings.Server,
                 SenderEmail = smtpSettings.SenderEmail,
                 SenderName = smtpSettings.SenderName,
+                Account = smtpSettings.Account,
+                Security = smtpSettings.Security
             }, ServiceLifetime.Singleton);
         });
         services.AddSingleton<IEmailNotificationService, EmailNotificationService>();

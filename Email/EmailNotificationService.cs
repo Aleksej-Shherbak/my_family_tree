@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Text;
 using Email.Options;
 using Microsoft.Extensions.Options;
 using NETCore.MailKit.Core;
@@ -28,9 +29,18 @@ public class EmailNotificationService : IEmailNotificationService
 
     private string GetEmailTemplate(string confirmAccountUrl)
     {
-        string emailTemplate = File.ReadAllText(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "EmailTemplates", "confirm_account.html"));
+        var assemblyPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var header = File.ReadAllText(Path.Combine(assemblyPath, "EmailTemplates", "Assets", "header.html"));
+        var footer = File.ReadAllText(Path.Combine(assemblyPath, "EmailTemplates", "Assets", "footer.html"));
 
-        return emailTemplate.Replace("{link}", confirmAccountUrl);
+        // TODO try to get email from the database. If it does not exist then use default template.
+        string defaultEmailTemplate = File.ReadAllText(Path.Combine(
+            assemblyPath, "EmailTemplates", "DefaultTemplates", "confirm_account.html"));
+
+        return new StringBuilder()
+            .Append(header)
+            .Append(defaultEmailTemplate.Replace("{link}", confirmAccountUrl))
+            .Append(footer).ToString();
     }
 
     private string GenerateConfirmAccountUrl(string code, int userId)
