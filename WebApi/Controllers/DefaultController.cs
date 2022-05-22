@@ -11,6 +11,6 @@ public class DefaultController : ControllerBase
     [HttpGet("")]
     public IActionResult Index()
     {
-        return Ok();
+        return Ok(new {res = "hello world!"});
     }
 }

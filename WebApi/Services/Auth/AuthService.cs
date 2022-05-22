@@ -10,28 +10,25 @@ public class AuthService
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
-    private readonly JwtService _jwtService;
     private readonly IEmailNotificationService _emailNotificationService;
-
+    
     public AuthService(
         UserManager<User> userManager,
         SignInManager<User> signInManager,
-        JwtService jwtService,
         IEmailNotificationService emailNotificationService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
-        _jwtService = jwtService;
         _emailNotificationService = emailNotificationService;
     }
 
-    public async Task<LoginResponse> LoginAsync(LoginRequest request)
+    public async Task LoginAsync(LoginRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user == null)
         {
-            throw new UnauthorizedAccessException();
+            throw new HttpUnauthorizedException();
         }
 
         var result = await _signInManager.PasswordSignInAsync(user, request.Password, false, false);
@@ -41,11 +38,7 @@ public class AuthService
             throw new HttpUnauthorizedException();
         }
 
-        var token = _jwtService.GenerateJwtToken(user);
-        return new LoginResponse
-        {
-            Token = token
-        };
+        await _signInManager.SignInAsync(user, false);
     }
 
     public async Task RegisterAsync(RegisterRequest request)
@@ -70,7 +63,7 @@ public class AuthService
         await _emailNotificationService.SendConfirmAccountEmailAsync(confirmationCode, user.Id, user.Email);
     }
 
-    public async Task<LoginResponse> ConfirmEmailAsync(ConfirmAccountRequest request)
+    public async Task ConfirmEmailAsync(ConfirmAccountRequest request)
     {
         var user = await _userManager.FindByIdAsync(request.UserId.ToString());
         if (user == null)
@@ -79,18 +72,15 @@ public class AuthService
         }
 
         var res = await _userManager.ConfirmEmailAsync(user, request.Code);
-
+        // TODO process Remember me 
         if (!res.Succeeded)
         {
             // TODO log identity errors
             throw new BusinessLogicException("Something went wrong.");
         }
-
-        var token = _jwtService.GenerateJwtToken(user);
-        return new LoginResponse
-        {
-            Token = token
-        };
+        
+        var rememberMe = false;
+        await _signInManager.SignInAsync(user, rememberMe);
     }
 
     private async Task ValidateIfCredentialsAreFreeOrThrowAsync(RegisterRequest request)

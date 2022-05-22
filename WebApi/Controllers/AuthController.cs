@@ -5,7 +5,7 @@ using WebApi.Services.Auth;
 namespace WebApi.Controllers;
 
 [ApiController]
-[Route("api")]
+[Route("auth")]
 public class AuthController : ControllerBase
 {
     private readonly AuthService _authService;
@@ -23,10 +23,16 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<LoginResponse> Login(LoginRequest request) =>
+    public async Task<IActionResult> Login(LoginRequest request)
+    {
         await _authService.LoginAsync(request);
+        return Ok();
+    }
 
     [HttpPost("confirm-account")]
-    public async Task<LoginResponse> ConfirmAccount(ConfirmAccountRequest request)
-        => await _authService.ConfirmEmailAsync(request);
+    public async Task<IActionResult> ConfirmAccount(ConfirmAccountRequest request)
+    {
+        await _authService.ConfirmEmailAsync(request);
+        return Ok();
+    }
 }
