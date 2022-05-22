@@ -11,34 +11,41 @@ public class AuthService
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly IEmailNotificationService _emailNotificationService;
-    
+    private readonly JwtService _jwtService;
+
     public AuthService(
         UserManager<User> userManager,
         SignInManager<User> signInManager,
-        IEmailNotificationService emailNotificationService)
+        IEmailNotificationService emailNotificationService,
+        JwtService jwtService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _emailNotificationService = emailNotificationService;
+        _jwtService = jwtService;
     }
 
-    public async Task LoginAsync(LoginRequest request)
+    public async Task<LoginResponse> LoginAsync(LoginRequest request)
     {
         var user = await _userManager.FindByEmailAsync(request.Email);
 
         if (user == null)
         {
-            throw new HttpUnauthorizedException();
+            throw new HttpUnauthorizedException("Invalid email or password.");
         }
 
-        var result = await _signInManager.PasswordSignInAsync(user, request.Password, false, false);
+        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
         if (!result.Succeeded)
         {
-            throw new HttpUnauthorizedException();
+            throw new HttpUnauthorizedException("Invalid email or password.");
         }
 
-        await _signInManager.SignInAsync(user, false);
+        var jwt = _jwtService.GenerateJwtToken(user);
+        return new LoginResponse
+        {
+            Token = jwt
+        };
     }
 
     public async Task RegisterAsync(RegisterRequest request)
@@ -63,7 +70,7 @@ public class AuthService
         await _emailNotificationService.SendConfirmAccountEmailAsync(confirmationCode, user.Id, user.Email);
     }
 
-    public async Task ConfirmEmailAsync(ConfirmAccountRequest request)
+    public async Task<LoginResponse> ConfirmEmailAsync(ConfirmAccountRequest request)
     {
         var user = await _userManager.FindByIdAsync(request.UserId.ToString());
         if (user == null)
@@ -79,8 +86,11 @@ public class AuthService
             throw new BusinessLogicException("Something went wrong.");
         }
         
-        var rememberMe = false;
-        await _signInManager.SignInAsync(user, rememberMe);
+        var jwt = _jwtService.GenerateJwtToken(user);
+        return new LoginResponse
+        {
+            Token = jwt
+        };
     }
 
     private async Task ValidateIfCredentialsAreFreeOrThrowAsync(RegisterRequest request)

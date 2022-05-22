@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace WebApi.Controllers;
 
 [Authorize]
-[ApiController]
-[Route("api")]
-public class DefaultController : ControllerBase
+[Route("")]
+public class DefaultController : Controller
 {
     [HttpGet("")]
     public IActionResult Index()
