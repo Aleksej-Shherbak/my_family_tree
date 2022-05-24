@@ -4,4 +4,5 @@ namespace Domains;
 
 public class User: IdentityUser<int>
 {
+    public List<FamilyTree> FamilyTrees { get; set; }
 }
