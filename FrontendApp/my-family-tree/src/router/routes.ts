@@ -39,4 +39,4 @@ export const publicRoutes: IRouterItem[] = [
     {path: '/register', component: Register, name: 'register'},
 ];*/
 
-export const getRoutByName = (routeName: string) => privateRoutes.find(({ name }) => name === routeName); 
+export const getRoutByName = (routeName: string): IRouterItem|undefined => privateRoutes.find(({ name }) => name === routeName); 

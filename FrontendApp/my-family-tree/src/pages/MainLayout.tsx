@@ -21,6 +21,8 @@ import MailIcon from '@mui/icons-material/Mail';
 import MenuItems from "../components/Menu/MenuItems";
 import AppRouter from "../router/AppRouter";
 import {Image} from "@mui/icons-material";
+import {Link} from "react-router-dom";
+import {getRoutByName} from "../router/routes";
 
 interface AppBarProps extends MuiAppBarProps {
     open?: boolean;
@@ -122,7 +124,9 @@ export default function MiniDrawer() {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Box component="img" src="logo.png" alt="My Family Tree logo" sx={{marginRight: 2}}/>
+                    <Link to="/">
+                        <Box component="img" src="logo.png" alt="My Family Tree logo" sx={{marginRight: 2}}/>
+                    </Link>
                     <Typography variant="h6" noWrap component="div">
                         MY FAMILY TREE
                     </Typography>
