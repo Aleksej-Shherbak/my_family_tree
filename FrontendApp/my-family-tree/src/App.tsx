@@ -1,13 +1,12 @@
 import * as React from 'react';
 import {BrowserRouter} from "react-router-dom";
-import MainLayout from "./pages/Layouts/MainLayout/MainLayout";
+import AppRouter from "./router/AppRouter";
 
 export default function App() {
-
     return (
         <div>
             <BrowserRouter>
-                <MainLayout/>
+                <AppRouter/>
             </BrowserRouter>
         </div>
     );

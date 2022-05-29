@@ -1,42 +1,58 @@
 import Home from "../pages/Home";
 import AccountSettings from "../pages/AccountSettings";
-import Login from "../pages/Login";
 import Register from "../pages/Register";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import {OverridableComponent} from "@mui/material/OverridableComponent";
 import {SvgIconTypeMap} from "@mui/material/SvgIcon/SvgIcon";
+import Login from "../pages/Login";
 
+
+interface IRouterSideMenuItem extends IRouterItem {
+    icon: OverridableComponent<SvgIconTypeMap> & { muiName: string },
+    title: string,
+}
 
 interface IRouterItem {
-    icon: OverridableComponent<SvgIconTypeMap> & { muiName: string },
-    title:string, 
-    name:string, 
+    name: string,
     path: string,
     component: () => JSX.Element,
 }
 
-export const privateRoutes: IRouterItem[] = [
+export const routeNames = {
+    home: 'home',
+    accountSettings: 'account-settings',
+    login: 'login',
+    register: 'register',
+}
+
+export const privateRoutes: IRouterSideMenuItem[] = [
     {
         path: '/',
         component: Home,
-        name: 'home',
+        name: routeNames.home,
         title: 'Tree',
         icon: AccountTreeIcon
     },
     {
         path: '/account-settings',
         component: AccountSettings,
-        name: 'settings',
+        name: routeNames.accountSettings,
         title: 'Account settings',
         icon: ManageAccountsIcon
     },
+
 ];
 
-/*
 export const publicRoutes: IRouterItem[] = [
-    {path: '/login', component: Login, name: 'login'},
-    {path: '/register', component: Register, name: 'register'},
-];*/
+    {path: '/login', component: Login, name: routeNames.login},
+    {path: '/register', component: Register, name: routeNames.register},
+];
 
-export const getRoutByName = (routeName: string): IRouterItem|undefined => privateRoutes.find(({ name }) => name === routeName); 
+export const getPathByName = (routeName: string): string => {
+    const res = [...privateRoutes, ...publicRoutes].find(({name}) => name === routeName);
+    if (res === undefined) {
+        return ''
+    }
+    return res.path;
+}; 

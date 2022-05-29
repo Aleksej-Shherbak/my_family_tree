@@ -1,10 +1,12 @@
-import * as React from 'react';
+import React from 'react';
+import NotAuthorizedLayout from "../layouts/NotAuthorizedLayout/NotAuthorizedLayout";
+import LoginForm from "../components/Forms/LoginForm/LoginForm";
 
 const Login = () => {
     return (
-        <div>
-            
-        </div>
+        <NotAuthorizedLayout>
+            <LoginForm/>
+        </NotAuthorizedLayout>
     );
 };
 

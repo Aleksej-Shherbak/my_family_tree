@@ -1,10 +1,11 @@
 import * as React from 'react';
+import NotAuthorizedLayout from "../layouts/NotAuthorizedLayout/NotAuthorizedLayout";
 
 const Register = () => {
     return (
-        <div>
-            
-        </div>
+        <NotAuthorizedLayout>
+            <div>This is the register page!</div>
+        </NotAuthorizedLayout>
     );
 };
 

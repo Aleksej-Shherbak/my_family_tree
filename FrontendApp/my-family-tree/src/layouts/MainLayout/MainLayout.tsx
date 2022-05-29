@@ -11,16 +11,19 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {Link} from "react-router-dom";
-import MenuItems from "../../../components/Menu/MenuItems";
-import AppRouter from "../../../router/AppRouter";
 import './MainLayout.scss';
 import {AppBar, Drawer} from "@mui/material";
+import {FC} from "react";
+import IChildrenContainer from "../../infrastructure/IChildrenContainer";
+import MenuItems from "../../components/Menu/MenuItems";
+import {useAuthenticated} from "../../hooks/useAuthenticated";
 
 
-export default function MiniDrawer() {
+const MainLayout: FC<IChildrenContainer> = ({children}) => {
+    useAuthenticated();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-    
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -30,8 +33,8 @@ export default function MiniDrawer() {
     };
 
     return (
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
+        <Box sx={{display: 'flex'}}>
+            <CssBaseline/>
             <AppBar className={open ? 'app-bar app-bar-opened' : 'app-bar'}>
                 <Toolbar>
                     <IconButton
@@ -41,34 +44,38 @@ export default function MiniDrawer() {
                         edge="start"
                         sx={{
                             marginRight: 5,
-                            ...(open && { display: 'none' }),
+                            ...(open && {display: 'none'}),
                         }}
                     >
-                        <MenuIcon />
+                        <MenuIcon/>
                     </IconButton>
                     <Link to="/">
-                        <Box component="img" src="logo.png" alt="My Family Tree logo" sx={{marginRight: 2, marginTop: 1}}/>
+                        <Box component="img" src="logo.png" alt="My Family Tree logo"
+                             sx={{marginRight: 2, marginTop: 1}}/>
                     </Link>
                     <Typography variant="h6" noWrap component="div">
                         MY FAMILY TREE
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <Drawer className={open ? 'menu-drawer menu-drawer-open' : 'menu-drawer menu-drawer-closed'} variant="permanent" open={open}>
+            <Drawer className={open ? 'menu-drawer menu-drawer-open' : 'menu-drawer menu-drawer-closed'}
+                    variant="permanent" open={open}>
                 <div className="drawer-head">
                     <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                        {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
                     </IconButton>
                 </div>
-                <Divider />
+                <Divider/>
                 <List>
-                    <MenuItems open={open}/>   
+                    <MenuItems open={open}/>
                 </List>
-                
+
             </Drawer>
-            <Box component="main" className="main-content" sx={{ flexGrow: 1, p: 3 }}>
-                <AppRouter/>
+            <Box component="main" className="main-content" sx={{flexGrow: 1, p: 3}}>
+                {children}
             </Box>
         </Box>
     );
 }
+
+export default MainLayout;
