@@ -11,7 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {Link} from "react-router-dom";
-import './MainLayout.scss';
+import styles from './MainLayout.module.scss';
 import {AppBar, Drawer} from "@mui/material";
 import {FC} from "react";
 import IChildrenContainer from "../../infrastructure/IChildrenContainer";
@@ -35,7 +35,7 @@ const MainLayout: FC<IChildrenContainer> = ({children}) => {
     return (
         <Box sx={{display: 'flex'}}>
             <CssBaseline/>
-            <AppBar className={open ? 'app-bar app-bar-opened' : 'app-bar'}>
+            <AppBar className={open ? `${styles.appBar} ${styles.appBarOpened}` : styles.appBar}>
                 <Toolbar>
                     <IconButton
                         color="inherit"
@@ -58,9 +58,10 @@ const MainLayout: FC<IChildrenContainer> = ({children}) => {
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <Drawer className={open ? 'menu-drawer menu-drawer-open' : 'menu-drawer menu-drawer-closed'}
-                    variant="permanent" open={open}>
-                <div className="drawer-head">
+            <Drawer
+                className={open ? `${styles.menuDrawer} ${styles.menuDrawerOpen}` : `${styles.menuDrawer} ${styles.menuDrawerClosed}`}
+                variant="permanent" open={open}>
+                <div className={styles.drawerHead}>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
                     </IconButton>
@@ -71,7 +72,7 @@ const MainLayout: FC<IChildrenContainer> = ({children}) => {
                 </List>
 
             </Drawer>
-            <Box component="main" className="main-content" sx={{flexGrow: 1, p: 3}}>
+            <Box component="main" className={styles.mainContent} sx={{flexGrow: 1, p: 3}}>
                 {children}
             </Box>
         </Box>
