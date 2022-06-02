@@ -14,6 +14,7 @@
     "@types/node": "^16.11.36",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.5",
+    "css-loader": "^6.7.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-router-dom": "^6.3.0",
@@ -48,6 +49,7 @@
     ]
   },
   "devDependencies": {
-    "@types/validator": "^13.7.2"
+    "@types/validator": "^13.7.2",
+    "react-app-rewired": "^2.2.1"
   }
 }

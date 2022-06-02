@@ -1,11 +1,11 @@
 import * as React from 'react';
 import {FC} from 'react';
-import styles from './NotAuthorizedLayout.module.scss';
+import './NotAuthorizedLayout.scss';
 import IChildrenContainer from "../../infrastructure/IChildrenContainer";
 
 const NotAuthorizedLayout: FC<IChildrenContainer> = ({children}) => {
     return (
-        <div className={styles.authContainer}>
+        <div className="NotAuthorizedLayout">
             {children}
         </div>
     );
