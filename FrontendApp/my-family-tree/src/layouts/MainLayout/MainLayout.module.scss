@@ -1,0 +1,61 @@
+.mainContent {
+  display: flex;
+
+  .appBar {
+    z-index: 1300 !important;
+    max-height: 71px;
+    transition: width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms !important;
+
+    .logo {
+      margin-right: 16px;
+      margin-top: 8px;
+    }
+
+    .openDrawerIconButton {
+      margin-right: 35px
+    }
+  }
+
+  .menuDrawer {
+    width: 240px;
+    flex-shrink: 0;
+    white-space: nowrap;
+    box-sizing: border-box;
+
+    .menuDrawerHead {
+      align-items: center;
+      display: flex;
+      justify-content: flex-start;
+      min-height: 70px;
+      padding: 0 8px;
+    }
+  }
+
+  .appBarOpened {
+    width: calc(100% - 240px) !important;
+  }
+
+  .menuDrawerOpen {
+    overflow-x: hidden;
+    transition: width 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+    width: 240px
+  }
+
+  .menuDrawerClosed {
+    @media (min-width: 600px) {
+      width: calc(64px + 1px)
+    }
+    overflow-x: hidden;
+    transition: width 195ms cubic-bezier(0.4, 0, 0.6, 1) 0ms;
+    width: 57px
+  }
+
+  .contentWrapper {
+    margin-top: 56px;
+    flex-grow: 1;
+    padding: 15px 30px 15px 30px;
+  }
+}
+
+  
+

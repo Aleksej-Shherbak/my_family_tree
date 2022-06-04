@@ -9,9 +9,8 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {Link} from "react-router-dom";
-import './MainLayout.scss';
+import styles from './MainLayout.module.scss';
 import {AppBar, Drawer} from "@mui/material";
 import {FC} from "react";
 import IChildrenContainer from "../../infrastructure/IChildrenContainer";
@@ -21,7 +20,6 @@ import {useAuthenticated} from "../../hooks/useAuthenticated";
 
 const MainLayout: FC<IChildrenContainer> = ({children}) => {
     useAuthenticated();
-    const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
     const handleDrawerOpen = () => {
@@ -33,25 +31,24 @@ const MainLayout: FC<IChildrenContainer> = ({children}) => {
     };
 
     return (
-        <Box sx={{display: 'flex'}}>
+        <Box className={styles.mainContent}>
             <CssBaseline/>
-            <AppBar className={open ? 'MainLayout-app-bar MainLayout-app-bar-opened' : 'MainLayout-app-bar'}>
+            <AppBar className={open ? `${styles.appBar} ${styles.appBarOpened}` : styles.appBar}>
                 <Toolbar>
                     <IconButton
                         color="inherit"
                         aria-label="open drawer"
                         onClick={handleDrawerOpen}
                         edge="start"
+                        className={styles.openDrawerIconButton}
                         sx={{
-                            marginRight: 5,
                             ...(open && {display: 'none'}),
                         }}
                     >
                         <MenuIcon/>
                     </IconButton>
                     <Link to="/">
-                        <Box component="img" src="logo.png" alt="My Family Tree logo"
-                             sx={{marginRight: 2, marginTop: 1}}/>
+                        <Box component="img" src="logo.png" alt="My Family Tree logo" className={styles.logo}/>
                     </Link>
                     <Typography variant="h6" noWrap component="div">
                         MY FAMILY TREE
@@ -59,20 +56,20 @@ const MainLayout: FC<IChildrenContainer> = ({children}) => {
                 </Toolbar>
             </AppBar>
             <Drawer
-                className={open ? 'MainLayout-menu-drawer MainLayout-menu-drawer-open'  : 'MainLayout-menu-drawer MainLayout-menu-drawer-closed'}
+                className={open ? `${styles.menuDrawer} ${styles.menuDrawerOpen}`  : `${styles.menuDrawer} ${styles.menuDrawerClosed}`}
                 variant="permanent" open={open}>
-                <div className="MainLayout-drawer-head">
+                <div className={styles.menuDrawerHead}>
                     <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
+                        <ChevronLeftIcon/>
                     </IconButton>
                 </div>
                 <Divider/>
-                <List>
+                <List className={open ? styles.menuDrawerOpen  : styles.menuDrawerClosed}>
                     <MenuItems open={open}/>
                 </List>
 
             </Drawer>
-            <Box component="main" className="MainLayout-main-content" sx={{flexGrow: 1, p: 3}}>
+            <Box component="main" className={styles.contentWrapper}>
                 {children}
             </Box>
         </Box>
