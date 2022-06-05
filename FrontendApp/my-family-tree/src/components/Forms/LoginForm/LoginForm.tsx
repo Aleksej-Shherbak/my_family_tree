@@ -3,6 +3,9 @@ import {Button, FormGroup, TextField} from "@mui/material";
 import {useTheme} from "@mui/material/styles";
 import LoginRequest from "../../../models/Auth/LoginRequest";
 import validator from 'validator'
+import {useDispatch, useSelector} from "react-redux";
+import {AuthenticatedAction, setAuth} from "../../../redux/auth/AuthActions";
+import {AuthState} from "../../../redux/auth/AuthReducer";
  
 const LoginForm = () => {
     const theme = useTheme();
@@ -34,8 +37,13 @@ const LoginForm = () => {
         return true;
     };
     
+    const dispatch = useDispatch();
+    const state = useSelector((state) => {
+        return state
+    })
     const handleSubmit = async () => {
-        
+        dispatch(setAuth());
+        console.log(state);
     }
 
     return (

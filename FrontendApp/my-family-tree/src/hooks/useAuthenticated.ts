@@ -4,7 +4,7 @@ import {getPathByName, routeNames} from "../router/routes";
 
 export const useAuthenticated = () => {
     // todo move to state
-    const isAuthenticated = true;
+    const isAuthenticated = false;
     let navigate = useNavigate();
 
     useEffect(() => {
