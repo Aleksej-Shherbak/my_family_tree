@@ -1,21 +1,30 @@
-import {Reducer} from "redux";
-import {AuthenticatedAction} from "./AuthActions";
-import {AuthenticatedEnum} from "./types";
+import {User} from "../../models/User";
+import {AuthActions, AuthTypes} from "./AuthTypes";
 
 export interface AuthState {
-    isAuthenticated: boolean
+    user: User|null
 }
 
 const initialState: AuthState = {
-    isAuthenticated: false
+    user: null
 }
 
-export const authReducer: Reducer = (state: AuthState = initialState, action: AuthenticatedAction): AuthState => {
+// TODO move it to a service
+const userString = localStorage.getItem('user');
+if (userString) {
+    initialState.user = JSON.parse(userString) as User;
+}
+
+export const authReducer = (state: AuthState = initialState, action: AuthActions): AuthState => {
     switch (action.type) {
-        case AuthenticatedEnum.Authorized:
-            return {...state, isAuthenticated: true }
-        case AuthenticatedEnum.NotAuthorized:
-            return {...state, isAuthenticated: false }
+        case AuthTypes.LOGIN_REQUEST:
+            return {user: action.user};
+        case AuthTypes.LOGIN_SUCCESS:
+            return {user: action.user};
+        case AuthTypes.LOGIN_FAILURE:
+            return {user: null}
+        case AuthTypes.LOGOUT:
+            return {user: null}
     }
     
     return state;
