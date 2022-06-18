@@ -1,15 +1,14 @@
-import {Action} from "redux";
+import {AnyAction} from "redux";
 import {User} from "../../models/User";
 
 export enum AuthTypes {
-    LOGIN_REQUEST = 1,
-    LOGIN_SUCCESS,
+    LOGIN_SUCCESS = 1,
     LOGIN_FAILURE,
     LOGOUT,
     REGISTER_SUCCESS,
     REGISTER_FAILURE,
 }
 
-export interface AuthActions extends Action<AuthTypes> {
+export interface AuthAction extends AnyAction {
     user: User|null
 }

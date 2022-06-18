@@ -16,6 +16,7 @@ import {FC} from "react";
 import IChildrenContainer from "../../infrastructure/IChildrenContainer";
 import MenuItems from "../../components/Menu/MenuItems";
 import {useAuthenticated} from "../../hooks/useAuthenticated";
+import AlertComponent from "../../components/Alert/AlertComponent";
 
 
 const MainLayout: FC<IChildrenContainer> = ({children}) => {
@@ -32,6 +33,7 @@ const MainLayout: FC<IChildrenContainer> = ({children}) => {
 
     return (
         <Box className={styles.mainContent}>
+            <AlertComponent/>
             <CssBaseline/>
             <AppBar className={open ? `${styles.appBar} ${styles.appBarOpened}` : styles.appBar}>
                 <Toolbar>

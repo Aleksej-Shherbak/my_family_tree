@@ -4,7 +4,15 @@ import {useTheme} from "@mui/material/styles";
 import validator from 'validator'
 import {useDispatch, useSelector} from "react-redux";
 import {LoginRequest} from "../../../Requests/Auth/LoginRequest";
- 
+import {authActions} from "../../../redux/auth/AuthActions";
+import {AnyAction} from "redux";
+import {AuthState} from "../../../redux/auth/AuthReducer";
+import {ThunkDispatch} from "redux-thunk";
+import {useNavigate} from "react-router-dom";
+import {getPathByName, routeNames} from "../../../router/routes";
+import {IAppState} from "../../../redux/AppStateTypes";
+import {AlertState} from "../../../redux/alert/AlertReducer";
+
 const LoginForm = () => {
     const theme = useTheme();
     const [isEmailHasCorrectFormat, setIsEmailHasCorrectFormat] = useState<boolean | null>(null);
@@ -35,11 +43,19 @@ const LoginForm = () => {
         return true;
     };
     
-    const dispatch = useDispatch();
-    const state = useSelector((state) => {
-        return state
-    })
+    const dispatch: ThunkDispatch<AuthState, any, AnyAction> = useDispatch();
+    const authState = useSelector<IAppState, AuthState>((state) => {
+        return state.auth
+    });
+    const alertState = useSelector<IAppState, AlertState>((state) => {
+        return state.alert
+    });
+    const navigate = useNavigate();
     const handleSubmit = async () => {
+        await dispatch(authActions.login(loginRequest));
+        if (authState.user !== null) {
+            navigate(getPathByName(routeNames.home));
+        }
     }
 
     return (
@@ -56,7 +72,7 @@ const LoginForm = () => {
                        onChange={(e) => setLoginRequest({...loginRequest, email: e.target.value})}
                        required={true}
                        onBlur={(e) => isEmailValid(e.target.value)}
-                       error={isEmailHasCorrectFormat === false}
+                       error={isEmailHasCorrectFormat === false || alertState.isError === true}
             />
 
             <TextField type="password"
@@ -68,6 +84,7 @@ const LoginForm = () => {
                        }}
                        onChange={(e) => setLoginRequest({...loginRequest, password: e.target.value})}
                        required={true}
+                       error={alertState.isError === true}
             />
             
             <Button disabled={!isSubmitEnabled} onClick={handleSubmit} sx={{width: theme.spacing(10)}} variant="contained">Login</Button>

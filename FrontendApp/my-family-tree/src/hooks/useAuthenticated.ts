@@ -1,15 +1,17 @@
 import {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import {getPathByName, routeNames} from "../router/routes";
+import {useSelector} from "react-redux";
+import {IAppState} from "../redux/AppStateTypes";
 
 export const useAuthenticated = () => {
-    // todo move to state
-    const isAuthenticated = false;
-    let navigate = useNavigate();
-
+    const user = useSelector<IAppState>((state ) => {
+        return state.auth.user
+    });
+    const navigate = useNavigate();
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (user === null) {
             return navigate(getPathByName(routeNames.login));
         }
-    }, [isAuthenticated]);
+    }, [user]);
 }

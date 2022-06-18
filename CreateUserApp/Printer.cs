@@ -12,6 +12,13 @@ public class Printer
         Console.ForegroundColor = ConsoleColor.White;
 
         Console.WriteLine($"{_spacer}{message}{_spacer}");
+        Console.BackgroundColor = ConsoleColor.Black;
+    }
+
+    public void PrintInformation(string message)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine(message);
     }
 
     public void PrintError(string message)
@@ -20,6 +27,8 @@ public class Printer
         Console.ForegroundColor = ConsoleColor.White;
 
         Console.WriteLine($"{_spacer}{message}{_spacer}");
+        Console.BackgroundColor = ConsoleColor.Black;
+        Console.ForegroundColor = ConsoleColor.White;
     }
 
     public void PrintMenu()
@@ -30,7 +39,10 @@ public class Printer
         Console.WriteLine("1. Create new user.");
         Console.WriteLine("2. Update an existing user.");
         Console.WriteLine("3. Delete user.");
-        Console.WriteLine("4. Exit.");
+        Console.WriteLine("4. Show users list.");
+        Console.WriteLine("5. Exit.");
+        Console.BackgroundColor = ConsoleColor.Black;
+        Console.ForegroundColor = ConsoleColor.White;
     }
 
     public void PrintErrorIdentityErrors(IdentityResult res)

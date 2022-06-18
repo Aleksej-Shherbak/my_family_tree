@@ -49,6 +49,9 @@ public class CreateUserService
                 DeleteUser();
                 break;
             case "4":
+                ShowUsersList();
+                break;
+            case "5":
                 Exit();
                 break;
             default:
@@ -107,6 +110,22 @@ public class CreateUserService
         _userManager.RemovePasswordAsync(user).GetAwaiter().GetResult();
         _userManager.AddPasswordAsync(user, userDto.Password).GetAwaiter().GetResult();
         _printer.PrintSuccess("Success!");
+    }
+
+    private void ShowUsersList()
+    {
+        var users = _userManager.Users.ToList();
+        if (!users.Any())
+        {
+            _printer.PrintError("You do not have any users yet.");
+            return;
+        }
+
+        _printer.PrintSuccess("You have the following users:");
+        foreach (var user in users)
+        {
+            _printer.PrintInformation($"ID: {user.Id}, email: {user.Email}");
+        }
     }
 
     private void DeleteUser()

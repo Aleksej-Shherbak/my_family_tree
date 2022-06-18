@@ -1,5 +1,6 @@
 import {User} from "../../models/User";
-import {AuthActions, AuthTypes} from "./AuthTypes";
+import {AuthAction, AuthTypes} from "./AuthTypes";
+import {Reducer} from "redux";
 
 export interface AuthState {
     user: User|null
@@ -9,21 +10,21 @@ const initialState: AuthState = {
     user: null
 }
 
-// TODO move it to a service
 const userString = localStorage.getItem('user');
 if (userString) {
     initialState.user = JSON.parse(userString) as User;
 }
 
-export const authReducer = (state: AuthState = initialState, action: AuthActions): AuthState => {
+export const authReducer: Reducer<AuthState, AuthAction> = (state: AuthState = initialState, action: AuthAction): AuthState => {
     switch (action.type) {
-        case AuthTypes.LOGIN_REQUEST:
-            return {user: action.user};
         case AuthTypes.LOGIN_SUCCESS:
+            localStorage.setItem('user', JSON.stringify(action.user))
             return {user: action.user};
         case AuthTypes.LOGIN_FAILURE:
+            localStorage.removeItem('user')
             return {user: null}
         case AuthTypes.LOGOUT:
+            localStorage.removeItem('user')
             return {user: null}
     }
     

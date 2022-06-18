@@ -11,7 +11,7 @@ IConfiguration configuration = new ConfigurationBuilder()
             
 var services = new ServiceCollection();
 services.AddStorageConfiguration(configuration);
-services.AddIdentity<User, IdentityRole>(opt =>
+services.AddIdentity<User, IdentityRole<int>>(opt =>
     {
         opt.Password.RequireDigit = false;
         opt.Password.RequiredLength = 1;

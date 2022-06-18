@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using ServicesInterfaces;
 using WebApi.Dto.Auth;
 using WebApi.Infrastructure.Exceptions;
+using WebApi.Mapping.Auth;
 
 namespace WebApi.Services.Auth;
 
@@ -44,7 +45,8 @@ public class AuthService
         var jwt = _jwtService.GenerateJwtToken(user);
         return new LoginResponse
         {
-            Token = jwt
+            Token = jwt,
+            User = user
         };
     }
 

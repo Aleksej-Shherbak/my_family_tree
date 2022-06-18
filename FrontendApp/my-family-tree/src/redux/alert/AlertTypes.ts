@@ -1,4 +1,4 @@
-import {Action} from "redux";
+import { AnyAction} from "redux";
 
 export enum AlertTypes {
     SUCCESS = 1,
@@ -6,6 +6,6 @@ export enum AlertTypes {
     CLEAR
 }  
 
-export interface AlertAction  extends Action<AlertTypes> {
+export interface AlertAction  extends AnyAction {
     message: string|null
 }

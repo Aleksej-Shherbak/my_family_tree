@@ -1,13 +1,14 @@
-import {AnyAction} from "redux";
+import {AnyAction, Dispatch} from "redux";
 import {ThunkDispatch} from "redux-thunk";
-import {User} from "../../models/User";
-import axios from "axios";
-import {AuthActions, AuthTypes} from "./AuthTypes";
+import axios, {AxiosError, AxiosResponse} from "axios";
+import {AuthAction, AuthTypes} from "./AuthTypes";
 import {alertActions} from "../alert/AlertActions";
 import {LoginRequest} from "../../Requests/Auth/LoginRequest";
 import {RegisterRequest} from "../../Requests/Auth/RegisterRequest";
-import {Token} from "../../models/Token";
-import {BaseResponse} from "../../Responses/BaseResponse";
+import {BASE_URL, LOGIN_URL, REGISTER_URL} from "../../constants/backend";
+import {AlertAction} from "../alert/AlertTypes";
+import {User} from "../../models/User";
+import {ErrorResponse} from "../../models/ErrorResponse";
 
 export const authActions = {
     login,
@@ -16,61 +17,48 @@ export const authActions = {
 };
 
 function login(request: LoginRequest) {
-    return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+    return async (dispatch: Dispatch<AuthAction|AlertAction>): Promise<void> => {
         try {
-            const response = await axios.post<LoginRequest, BaseResponse<Token>>('http:ya.ru', request);
-
-            if (response.isSuccess) {
-                // TODO do something with response
-            } else {
-                dispatch(failure())
-                dispatch(alertActions.error(response.message))
-            }
-        } catch (e) {
-            dispatch(failure())
-            // TODO check it
-            dispatch(alertActions.error(e as string))
+            const response = await axios.post<LoginRequest, AxiosResponse<User>>(`${BASE_URL}${LOGIN_URL}`, request, {withCredentials: true});
+            await dispatch(success(response.data));
+        } catch (error) {
+            const err = error as AxiosError<ErrorResponse>;
+            await dispatch(failure())
+            await dispatch(alertActions.error(err.response?.data.error ?? 'Login error.'));
         }
     };
 
-    function success(user: User): AuthActions {
+    function success(user: User): AuthAction {
         return {type: AuthTypes.LOGIN_SUCCESS, user}
     }
 
-    function failure(): AuthActions {
+    function failure(): AuthAction {
         return {type: AuthTypes.LOGIN_FAILURE, user: null}
     }
 }
 
-function logout(): AuthActions {
-    localStorage.removeItem('user');
-    return {type: AuthTypes.LOGOUT, user: null};
+function logout(): AuthAction {
+    return {type: AuthTypes.LOGOUT,  user: null};
 }
 
 function register(request: RegisterRequest) {
 
     return async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
         try {
-            const response = await axios.post<RegisterRequest, BaseResponse<Token>>('http:ya.ru', request);
-
-            if (response.isSuccess) {
-                // TODO do soemthing with token
-            } else {
-                dispatch(failure())
-                dispatch(alertActions.error(response.message))
-            }
-        } catch (e) {
-            dispatch(failure())
-            // TODO check it
-            dispatch(alertActions.error(e as string))
+            const response = await axios.post<RegisterRequest, AxiosResponse<User>>(`${BASE_URL}${REGISTER_URL}`, request);
+            dispatch(success(response.data));
+        } catch (error) {
+            const err = error as AxiosError<ErrorResponse>;
+            await dispatch(failure())
+            await dispatch(alertActions.error(err.response?.data.error ?? 'Login error.'));
         }
 
-        function success(user: User): AuthActions {
+        function success(user: User): AuthAction {
             return {type: AuthTypes.REGISTER_SUCCESS, user}
         }
 
-        function failure(): AuthActions {
-            return {type: AuthTypes.REGISTER_FAILURE, user: null}
+        function failure(): AuthAction {
+            return {type: AuthTypes.REGISTER_FAILURE,  user: null}
         }
     }
 }
