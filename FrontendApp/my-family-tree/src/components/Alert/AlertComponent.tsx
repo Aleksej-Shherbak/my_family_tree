@@ -1,25 +1,47 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useSelector} from "react-redux";
 import {IAppState} from "../../redux/AppStateTypes";
 import {AlertState} from "../../redux/alert/AlertReducer";
-import {Alert} from "@mui/material";
+import {Alert, Box, Collapse, IconButton} from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 
 const AlertComponent: React.FC = () => {
     const alertState = useSelector<IAppState, AlertState>((state) => state.alert);
+    const [open, setOpen] = React.useState(true);
+
+    useEffect(() => {
+        setOpen(true);
+    }, [alertState])
     
     if (!alertState.message) {
         return (<></>);
     }
-    
-    if (alertState.isError) {
-        return (
-            <Alert severity="error">{alertState.message}</Alert>
-        );    
-    } else {
-        return (
-            <Alert severity="success">{alertState.message}</Alert>
-        );
-    }
+
+    const severity = alertState.isError === true ? "error" : "success";
+    return (
+        <Box sx={{ width: '100%' }}>
+            <Collapse in={open}>
+                <Alert
+                    action={
+                        <IconButton
+                            aria-label="close"
+                            color="inherit"
+                            size="small"
+                            onClick={() => {
+                                setOpen(false);
+                            }}
+                        >
+                            <CloseIcon fontSize="inherit" />
+                        </IconButton>
+                    }
+                    sx={{ mb: 2 }}
+                    severity={severity}
+                >
+                    {alertState.message}
+                </Alert>
+            </Collapse>
+        </Box>
+    );
 };
 
 export default AlertComponent;

@@ -50,12 +50,16 @@ const LoginForm = () => {
     const alertState = useSelector<IAppState, AlertState>((state) => {
         return state.alert
     });
+    
     const navigate = useNavigate();
-    const handleSubmit = async () => {
-        await dispatch(authActions.login(loginRequest));
+    useEffect(() => {
         if (authState.user !== null) {
             navigate(getPathByName(routeNames.home));
         }
+    }, [authState.user])
+    
+    const handleSubmit = async () => {
+        await dispatch(authActions.login(loginRequest));
     }
 
     return (
