@@ -34,10 +34,12 @@ const AlertComponent: React.FC = () => {
                             <CloseIcon fontSize="inherit" />
                         </IconButton>
                     }
-                    sx={{ mb: 2 }}
+                    sx={{ mb: 2, fontSize: "largest" }}
                     severity={severity}
                 >
-                    {alertState.message}
+                    <strong>
+                        {alertState.message}
+                    </strong>
                 </Alert>
             </Collapse>
         </Box>

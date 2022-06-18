@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {KeyboardEventHandler, useEffect, useState} from 'react';
 import {Button, FormGroup, TextField} from "@mui/material";
 import {useTheme} from "@mui/material/styles";
 import validator from 'validator'
@@ -58,8 +58,14 @@ const LoginForm = () => {
         }
     }, [authState.user])
     
-    const handleSubmit = async () => {
-        await dispatch(authActions.login(loginRequest));
+    const handleSubmit = () => {
+        return dispatch(authActions.login(loginRequest));
+    }
+
+    const handleOnKeyUp = async (e:  React.KeyboardEvent) => {
+        if (e.key === 'Enter' && isSubmitEnabled) {
+            return handleSubmit();
+        }
     }
 
     return (
@@ -77,6 +83,8 @@ const LoginForm = () => {
                        required={true}
                        onBlur={(e) => isEmailValid(e.target.value)}
                        error={isEmailHasCorrectFormat === false || alertState.isError === true}
+                       onKeyUp={handleOnKeyUp}
+
             />
 
             <TextField type="password"
@@ -89,6 +97,7 @@ const LoginForm = () => {
                        onChange={(e) => setLoginRequest({...loginRequest, password: e.target.value})}
                        required={true}
                        error={alertState.isError === true}
+                       onKeyUp={handleOnKeyUp}
             />
             
             <Button disabled={!isSubmitEnabled} onClick={handleSubmit} sx={{width: theme.spacing(10)}} variant="contained">Login</Button>
