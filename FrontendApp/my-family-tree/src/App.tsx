@@ -9,7 +9,7 @@ const store = configureStore({
     reducer: rootReducer,
 })
 
-export const app = <Provider store={store}>
+export const App: React.FC = () =>  <Provider store={store}>
     <BrowserRouter>
         <AppRouter/>
     </BrowserRouter>

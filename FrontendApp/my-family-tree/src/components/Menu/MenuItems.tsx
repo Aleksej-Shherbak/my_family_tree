@@ -10,10 +10,10 @@ interface MenuItemsProps {
 
 const MenuItems: FC<MenuItemsProps> = (props) => {
     const menuItems = privateRoutes.map((item) => (
-        <MenuItem icon={item.icon} isOpen={props.open} title={item.title} path={item.path}/>
+        <MenuItem key={item.title} icon={item.icon} isOpen={props.open} title={item.title} path={item.path}/>
     ));
 
-    menuItems.push(<LogoutComponent isOpen={props.open}/>)
+    menuItems.push(<LogoutComponent key="close" isOpen={props.open}/>)
 
     return (
         <>

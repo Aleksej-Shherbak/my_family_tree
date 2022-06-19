@@ -12,17 +12,17 @@ const initialState: AlertState = {
 
 export const alertReducer = (state: AlertState = initialState, action: AlertAction): AlertState => {
     switch (action.type) {
-        case AlertTypes.SUCCESS:
+        case AlertTypes.ALERT_SUCCESS:
             return {
                 message: action.message,
                 isError: false
             };
-        case AlertTypes.ERROR:
+        case AlertTypes.ALERT_ERROR:
             return {
                 message: action.message,
                 isError: true
             };
-        case AlertTypes.CLEAR:
+        case AlertTypes.ALERT_CLEAR:
             return {
                 message: null,
                 isError: null
