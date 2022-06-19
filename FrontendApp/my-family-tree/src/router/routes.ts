@@ -7,7 +7,6 @@ import {OverridableComponent} from "@mui/material/OverridableComponent";
 import {SvgIconTypeMap} from "@mui/material/SvgIcon/SvgIcon";
 import Login from "../pages/Login";
 
-
 interface IRouterSideMenuItem extends IRouterItem {
     icon: OverridableComponent<SvgIconTypeMap> & { muiName: string },
     title: string,
@@ -23,6 +22,7 @@ export const routeNames = {
     home: 'home',
     accountSettings: 'account-settings',
     login: 'login',
+    logout: 'logout',
     register: 'register',
 }
 
@@ -41,7 +41,6 @@ export const privateRoutes: IRouterSideMenuItem[] = [
         title: 'Account settings',
         icon: ManageAccountsIcon
     },
-
 ];
 
 export const publicRoutes: IRouterItem[] = [

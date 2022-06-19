@@ -21,10 +21,13 @@ export const authReducer: Reducer<AuthState, AuthAction> = (state: AuthState = i
             localStorage.setItem('user', JSON.stringify(action.user))
             return {user: action.user};
         case AuthTypes.LOGIN_FAILURE:
-            localStorage.removeItem('user')
+            localStorage.removeItem('user');
+            return {user: null}
+        case AuthTypes.LOGOUT_FAILURE:
+            localStorage.removeItem('user');
             return {user: null}
         case AuthTypes.LOGOUT:
-            localStorage.removeItem('user')
+            localStorage.removeItem('user');
             return {user: null}
     }
     

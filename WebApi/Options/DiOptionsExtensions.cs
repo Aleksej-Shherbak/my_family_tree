@@ -10,6 +10,7 @@ public static class AddOptionsExtensions
         services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
         services.Configure<EmailConfirmation>(configuration.GetSection(nameof(EmailConfirmation)));
         services.Configure<SmtpSettings>(configuration.GetSection(nameof(SmtpSettings)));
+        services.Configure<AuthOptions>(configuration.GetSection(nameof(AuthOptions)));
         return services;
     }
 }

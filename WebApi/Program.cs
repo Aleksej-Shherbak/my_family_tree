@@ -38,6 +38,7 @@ if (app.Environment.IsProduction())
 
 app.UseCors();
 app.UseExceptionHandlerMiddleware();
+app.UseJwtCookieReaderCookie();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
