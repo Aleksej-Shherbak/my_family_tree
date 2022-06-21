@@ -5,7 +5,7 @@ import {ThunkDispatch} from "redux-thunk";
 import {AnyAction} from "redux";
 import MenuItem from "./MenuItem";
 import {authActions} from '../../redux/auth/AuthActions';
-import {getPathByName, routeNames} from '../../router/routes';
+import {getRoutePathByName, routeNames} from '../../router/routes';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 interface LogoutComponentProps {
@@ -18,7 +18,7 @@ const LogoutComponent: React.FC<LogoutComponentProps> = (props) => {
 
     const logoutCallback = function () {
         dispatch(authActions.logout()).then(() => {
-            navigate(getPathByName(routeNames.login));
+            navigate(getRoutePathByName(routeNames.login));
         });
     };
     return (<MenuItem icon={ExitToAppIcon} isOpen={props.isOpen} title="Logout" callback={logoutCallback}/>);

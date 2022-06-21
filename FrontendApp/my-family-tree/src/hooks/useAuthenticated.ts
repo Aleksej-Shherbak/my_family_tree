@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
-import {getPathByName, routeNames} from "../router/routes";
+import {getRoutePathByName, routeNames} from "../router/routes";
 import {useSelector} from "react-redux";
 import {IAppState} from "../redux/AppStateTypes";
 
@@ -11,7 +11,7 @@ export const useAuthenticated = () => {
     const navigate = useNavigate();
     useEffect(() => {
         if (user === null) {
-            return navigate(getPathByName(routeNames.login));
+            return navigate(getRoutePathByName(routeNames.login));
         }
     }, [user]);
 }

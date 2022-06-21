@@ -1,13 +1,13 @@
 import * as React from 'react';
 import {Route, Routes} from "react-router-dom";
-import {privateRoutes, publicRoutes} from "./routes";
+import {sideBarMenuRoutes, routes} from "./routes";
 
 const AppRouter = () => {
     return (
         <>
             <Routes>
                 {
-                    [...publicRoutes, ...privateRoutes]
+                    [...routes, ...sideBarMenuRoutes]
                         .map(({path, component}) =>
                             <Route path={path} key={path} element={component()}/>
                         )

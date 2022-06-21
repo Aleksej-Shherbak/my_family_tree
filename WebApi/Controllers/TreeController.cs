@@ -14,21 +14,6 @@ public class TreeController : Controller
     {
         return Ok(new FamilyTreeList
         {
-            Trees = new []
-            {
-                new FamilyTree
-                {
-                    Id = 1,
-                    Title = "Family tree 1",
-                    Description = "Description family tree 1"
-                },
-                new FamilyTree
-                {
-                    Id = 2,
-                    Title = "Family tree 2",
-                    Description = "Description family tree 2"
-                }
-            }
         });
     }
 }

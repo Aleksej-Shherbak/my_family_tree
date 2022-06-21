@@ -9,7 +9,7 @@ import {AnyAction} from "redux";
 import {AuthState} from "../../../redux/auth/AuthReducer";
 import {ThunkDispatch} from "redux-thunk";
 import {useNavigate} from "react-router-dom";
-import {getPathByName, routeNames} from "../../../router/routes";
+import {getRoutePathByName, routeNames} from "../../../router/routes";
 import {IAppState} from "../../../redux/AppStateTypes";
 import {AlertState} from "../../../redux/alert/AlertReducer";
 
@@ -54,7 +54,7 @@ const LoginForm = () => {
     const navigate = useNavigate();
     useEffect(() => {
         if (authState.user !== null) {
-            navigate(getPathByName(routeNames.home));
+            navigate(getRoutePathByName(routeNames.home));
         }
     }, [authState.user])
     

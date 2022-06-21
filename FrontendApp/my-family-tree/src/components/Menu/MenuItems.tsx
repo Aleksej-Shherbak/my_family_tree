@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {FC} from 'react';
-import {privateRoutes} from "../../router/routes";
+import {sideBarMenuRoutes} from "../../router/routes";
 import MenuItem from "./MenuItem";
 import LogoutComponent from "./LogoutComponent";
 
@@ -9,7 +9,7 @@ interface MenuItemsProps {
 }
 
 const MenuItems: FC<MenuItemsProps> = (props) => {
-    const menuItems = privateRoutes.map((item) => (
+    const menuItems = sideBarMenuRoutes.map((item) => (
         <MenuItem key={item.title} icon={item.icon} isOpen={props.open} title={item.title} path={item.path}/>
     ));
 

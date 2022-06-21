@@ -3,9 +3,11 @@ import AccountSettings from "../pages/AccountSettings";
 import Register from "../pages/Register";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import AddIcon from '@mui/icons-material/Add';
 import {OverridableComponent} from "@mui/material/OverridableComponent";
 import {SvgIconTypeMap} from "@mui/material/SvgIcon/SvgIcon";
 import Login from "../pages/Login";
+import EditTree from "../pages/tree/EditTree";
 
 interface IRouterSideMenuItem extends IRouterItem {
     icon: OverridableComponent<SvgIconTypeMap> & { muiName: string },
@@ -24,9 +26,18 @@ export const routeNames = {
     login: 'login',
     logout: 'logout',
     register: 'register',
+    
+    createNewTree: 'create-new-tree'
 }
 
-export const privateRoutes: IRouterSideMenuItem[] = [
+export const sideBarMenuRoutes: IRouterSideMenuItem[] = [
+    {
+        path: '/tree-create',
+        component: EditTree,
+        name: routeNames.createNewTree,
+        title: 'Create new tree',
+        icon: AddIcon
+    },
     {
         path: '/',
         component: Home,
@@ -41,15 +52,17 @@ export const privateRoutes: IRouterSideMenuItem[] = [
         title: 'Account settings',
         icon: ManageAccountsIcon
     },
+
+
 ];
 
-export const publicRoutes: IRouterItem[] = [
+export const routes: IRouterItem[] = [
     {path: '/login', component: Login, name: routeNames.login},
     {path: '/register', component: Register, name: routeNames.register},
 ];
 
-export const getPathByName = (routeName: string): string => {
-    const res = [...privateRoutes, ...publicRoutes].find(({name}) => name === routeName);
+export const getRoutePathByName = (routeName: string): string => {
+    const res = [...sideBarMenuRoutes, ...routes].find(({name}) => name === routeName);
     if (res === undefined) {
         return ''
     }
