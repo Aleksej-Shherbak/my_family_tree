@@ -1,8 +1,11 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace WebApi.Dto.Tree;
 
-public class FamilyTree
+public class FamilyTreeRequest
 {
-    public int Id { get; set; }
+    [Required]
     public string Title { get; set; }
+    [Required]
     public string Description { get; set; }
 }

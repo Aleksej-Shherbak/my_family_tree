@@ -4,6 +4,7 @@ using EntityFramework;
 using Microsoft.AspNetCore.Identity;
 using WebApi.Di.Auth;
 using WebApi.Di.Cors;
+using WebApi.Di.Services;
 using WebApi.Di.Swagger;
 using WebApi.Middlewares;
 using WebApi.Options;
@@ -22,6 +23,8 @@ builder.Services.AddStorageConfiguration(builder.Configuration);
 builder.Services.AddIdentity<User, IdentityRole<int>>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddServicesConfiguration();
 
 var app = builder.Build();
 

@@ -1,6 +1,8 @@
+using Dto;
+
 namespace WebApi.Dto.Tree;
 
 public class FamilyTreeList
 {
-    public FamilyTree[] Trees { get; set; }
+    public FamilyTreeDto[] Trees { get; set; }
 }

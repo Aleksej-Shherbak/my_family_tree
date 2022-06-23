@@ -1,8 +1,8 @@
 using Domains;
+using Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using ServicesInterfaces;
 using WebApi.Dto.Auth;
-using WebApi.Infrastructure.Exceptions;
 using WebApi.Mapping.Auth;
 
 namespace WebApi.Services.Auth;
@@ -32,14 +32,14 @@ public class AuthService
 
         if (user == null)
         {
-            throw new HttpUnauthorizedException("Invalid email or password.");
+            throw new MyFamilyTreeUnauthorizedException("Invalid email or password.");
         }
 
         var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
         if (!result.Succeeded)
         {
-            throw new HttpUnauthorizedException("Invalid email or password.");
+            throw new MyFamilyTreeUnauthorizedException("Invalid email or password.");
         }
 
         var jwt = _jwtService.GenerateJwtToken(user);
@@ -64,7 +64,7 @@ public class AuthService
         if (!res.Succeeded)
         {
             // TODO log it.
-            throw new InternalServerErrorException("Failed to create user.");
+            throw new MyFamilyTreeInternalServerErrorException("Failed to create user.");
         }
 
         // TODO enqueue this to RabbitMQ.
@@ -77,14 +77,14 @@ public class AuthService
         var user = await _userManager.FindByIdAsync(request.UserId.ToString());
         if (user == null)
         {
-            throw new HttpNotFoundException("User not found!");
+            throw new MyFamilyTreeNotFoundException("User not found!");
         }
 
         var res = await _userManager.ConfirmEmailAsync(user, request.Code);
         if (!res.Succeeded)
         {
             // TODO log identity errors
-            throw new BusinessLogicException("Something went wrong.");
+            throw new MyFamilyTreeBusinessLogicException("Something went wrong.");
         }
         
         var jwt = _jwtService.GenerateJwtToken(user);
@@ -100,14 +100,14 @@ public class AuthService
 
         if (user != null)
         {
-            throw new BusinessLogicException("Email is already busy!");
+            throw new MyFamilyTreeBusinessLogicException("Email is already busy!");
         }
 
         user = await _userManager.FindByNameAsync(request.Username);
 
         if (user != null)
         {
-            throw new BusinessLogicException("Username is already busy!");
+            throw new MyFamilyTreeBusinessLogicException("Username is already busy!");
         }
     }
 }

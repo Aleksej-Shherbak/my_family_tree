@@ -7,7 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Dto\Dto.csproj" />
+      <ProjectReference Include="..\EntityFramework\EntityFramework.csproj" />
+      <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+      <ProjectReference Include="..\ServicesInterfaces\ServicesInterfaces.csproj" />
     </ItemGroup>
 
 </Project>

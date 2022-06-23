@@ -16,13 +16,18 @@
     </ItemGroup>
     
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.5" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0-preview.4.22229.4" />
         <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="7.0.0-preview.4.22229.4" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0-preview.4.22229.4" />
+        <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.5" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0-preview.4.22229.4" />
+
     </ItemGroup>
     
     <ItemGroup>
+      <ProjectReference Include="..\Domains\Domains.csproj" />
+      <ProjectReference Include="..\EntityFramework\EntityFramework.csproj" />
       <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     </ItemGroup>
     

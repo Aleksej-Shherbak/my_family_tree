@@ -1,6 +1,6 @@
 using System.Net;
+using Infrastructure.Exceptions;
 using Newtonsoft.Json;
-using WebApi.Infrastructure.Exceptions;
 
 namespace WebApi.Middlewares;
 
@@ -19,7 +19,7 @@ public class ExceptionHandlerMiddleware
         {
             await _next(httpContext);
         }
-        catch (HttpException e)
+        catch (MyFamilyTreeException e)
         {
             await HandleException(httpContext, e.StatusCode, e);
         }
