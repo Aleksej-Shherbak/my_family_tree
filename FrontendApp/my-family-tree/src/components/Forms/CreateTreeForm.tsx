@@ -1,11 +1,9 @@
 import React from 'react';
-import {Formik, useFormik} from 'formik';
+import {Formik} from 'formik';
 import * as yup from 'yup';
-import {Button, Input, TextField} from "@mui/material";
+import {Button, TextField} from "@mui/material";
 import {useTheme} from "@mui/material/styles";
-import IconButton from "@mui/material/IconButton";
-import {PhotoCamera} from "@mui/icons-material";
-import PreviewImage from "./PreviewImage";
+import FileInputWithImageView from "./FileInputWithImage/FileInputWithImageView";
 
 const validationSchema = yup.object({
     title: yup
@@ -40,26 +38,15 @@ const CreateTreeForm = () => {
                   touched,
                   handleChange,
                   setFieldValue
-              }) => (
+            }) => (
                 <form>
-                    {values.image && <PreviewImage file={values.image}/>}
-                    <label htmlFor="icon-button-file">
-                        <IconButton color="primary" aria-label="upload picture" component="span" sx={{
-                            marginBottom: theme.spacing(2)
-                        }}>
-                            <PhotoCamera sx={{marginRight: theme.spacing(1)}}/> UPLOAD IMAGE
-                        </IconButton>
-                        <Input
-                            name="image"
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
-                                {setFieldValue('image', e.currentTarget.files?.item(0))}}
-                            id="icon-button-file"
-                            type="file"
-                            sx={{
-                                display: "none"
-                            }}/>
-                    </label>
-
+                    <FileInputWithImageView onChangeHandler={(e: React.ChangeEvent<HTMLInputElement>|null) => {
+                        if (e === null) {
+                            setFieldValue('image', null)
+                            return;
+                        }
+                        setFieldValue('image', e.currentTarget.files?.item(0))
+                    }} />
                     <TextField
                         fullWidth
                         name="title"

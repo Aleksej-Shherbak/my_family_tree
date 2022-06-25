@@ -15,9 +15,9 @@ const PreviewImage: React.FC<PreviewImageProps> = ({ file }) => {
         }
     };
     return (
-        <div>
-            {preview && <img src={preview} alt="preview" width="200px" height="200px"/>}
-        </div>
+        <>
+            {preview && <img src={preview} alt="preview" width="100%" height="100%"/>}
+        </>
     );
 };
 
