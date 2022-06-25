@@ -13,6 +13,7 @@ import {getRoutePathByName, routeNames} from "../../../router/routes";
 import {IAppState} from "../../../redux/AppStateTypes";
 import {AlertState} from "../../../redux/alert/AlertReducer";
 
+// TODO use formik here
 const LoginForm = () => {
     const theme = useTheme();
     const [isEmailHasCorrectFormat, setIsEmailHasCorrectFormat] = useState<boolean | null>(null);
