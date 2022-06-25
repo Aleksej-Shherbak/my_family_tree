@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import IconButton from "@mui/material/IconButton";
-import {PhotoCamera, Cancel} from "@mui/icons-material";
+import {Cancel, PhotoCamera} from "@mui/icons-material";
 import {Box, Input} from "@mui/material";
 import {useTheme} from "@mui/material/styles";
 import {pink} from "@mui/material/colors";
@@ -48,6 +48,7 @@ const FileInputWithImageView: React.FC<FileInputWithImageViewProps> = ({onChange
                 </IconButton>
                 <PreviewImage file={file}/>
             </Box>}
+            
             {!file && <label htmlFor="icon-button-file">
                 <IconButton color="primary" aria-label="upload picture" component="span" sx={{
                     marginBottom: theme.spacing(2)
@@ -61,7 +62,8 @@ const FileInputWithImageView: React.FC<FileInputWithImageViewProps> = ({onChange
                     type="file"
                     sx={{
                         display: "none"
-                    }}/>
+                    }}
+                />
             </label>
             }    
         </>
