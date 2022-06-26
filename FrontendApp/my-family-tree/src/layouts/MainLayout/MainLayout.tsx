@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useTheme} from '@mui/material/styles';
+import {FC} from 'react';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
@@ -12,15 +12,11 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import {Link} from "react-router-dom";
 import styles from './MainLayout.module.scss';
 import {AppBar, Drawer} from "@mui/material";
-import {FC} from "react";
 import IChildrenContainer from "../../infrastructure/IChildrenContainer";
 import MenuItems from "../../components/Menu/MenuItems";
-import {useAuthenticated} from "../../hooks/useAuthenticated";
 import AlertComponent from "../../components/Alert/AlertComponent";
 
-
 const MainLayout: FC<IChildrenContainer> = ({children}) => {
-    useAuthenticated();
     const [open, setOpen] = React.useState(false);
 
     const handleDrawerOpen = () => {

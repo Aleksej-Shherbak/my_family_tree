@@ -17,7 +17,8 @@ interface IRouterSideMenuItem extends IRouterItem {
 interface IRouterItem {
     name: string,
     path: string,
-    component: () => JSX.Element,
+    isPrivate?: boolean,
+    component: JSX.Element,
 }
 
 export const routeNames = {
@@ -33,32 +34,34 @@ export const routeNames = {
 export const sideBarMenuRoutes: IRouterSideMenuItem[] = [
     {
         path: '/tree-create',
-        component: EditTree,
+        component: <EditTree/>,
         name: routeNames.createNewTree,
         title: 'Create new tree',
-        icon: AddIcon
+        icon: AddIcon,
+        isPrivate: true
     },
     {
         path: '/',
-        component: Home,
+        component: <Home/>,
         name: routeNames.home,
         title: 'Tree',
-        icon: AccountTreeIcon
+        icon: AccountTreeIcon,
+        isPrivate: true
+
     },
     {
         path: '/account-settings',
-        component: AccountSettings,
+        component: <AccountSettings/>,
         name: routeNames.accountSettings,
         title: 'Account settings',
-        icon: ManageAccountsIcon
+        icon: ManageAccountsIcon,
+        isPrivate: true
     },
-
-
 ];
 
 export const routes: IRouterItem[] = [
-    {path: '/login', component: Login, name: routeNames.login},
-    {path: '/register', component: Register, name: routeNames.register},
+    {path: '/login', component: <Login/>, name: routeNames.login},
+    {path: '/register', component: <Register/>, name: routeNames.register},
 ];
 
 export const getRoutePathByName = (routeName: string): string => {
