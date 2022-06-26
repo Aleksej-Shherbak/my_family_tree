@@ -3,17 +3,17 @@ import {TreeAction, TreeActionTypes} from "./TreeTypes";
 import {Tree} from "../../models/tree/Tree";
 
 export interface TreeState {
-    trees: Tree[]
+    tree: Tree|null
 }
 
 const initialState: TreeState = {
-    trees: []
+    tree: null
 };
 
-export const TreeReducer: Reducer<TreeState, TreeAction> = (state: TreeState = initialState, action: TreeAction): TreeState => {
+export const TreeListReducer: Reducer<TreeState, TreeAction> = (state: TreeState = initialState, action: TreeAction): TreeState => {
     switch (action.type) {
-        case TreeActionTypes.TREE_GET_LIST:
-            return {trees: action.trees}
+        case TreeActionTypes.TREE_CREATE:
+            return {tree: action.tree}
         default:
             return state;
     }

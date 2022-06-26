@@ -30,7 +30,7 @@ public class TreeController : Controller
     }
 
     [HttpPost]
-    public async Task<BaseResponse<int>> Create(FamilyTreeRequest request, CancellationToken token)
+    public async Task<BaseResponse<int>> Create([FromForm] FamilyTreeRequest request, CancellationToken token)
     {
         var res = await _treeService.CreateTree(new FamilyTreeDto
         {

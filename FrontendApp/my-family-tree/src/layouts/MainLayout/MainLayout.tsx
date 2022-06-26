@@ -29,7 +29,6 @@ const MainLayout: FC<IChildrenContainer> = ({children}) => {
 
     return (
         <Box className={styles.mainContent}>
-            <AlertComponent/>
             <CssBaseline/>
             <AppBar className={open ? `${styles.appBar} ${styles.appBarOpened}` : styles.appBar}>
                 <Toolbar>
@@ -51,6 +50,7 @@ const MainLayout: FC<IChildrenContainer> = ({children}) => {
                     <Typography variant="h6" noWrap component="div">
                         MY FAMILY TREE
                     </Typography>
+                    <AlertComponent/>
                 </Toolbar>
             </AppBar>
             <Drawer

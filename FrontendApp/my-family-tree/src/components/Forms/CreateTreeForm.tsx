@@ -4,9 +4,15 @@ import * as yup from 'yup';
 import {Box, Button, TextField} from "@mui/material";
 import {useTheme} from "@mui/material/styles";
 import FileInputWithImageView from "./FileInputWithImage/FileInputWithImageView";
+import {ThunkDispatch} from "redux-thunk";
+import {AuthState} from "../../redux/auth/AuthReducer";
+import {AnyAction} from "redux";
+import {useDispatch} from "react-redux";
+import {treeActions} from "../../redux/tree/TreeActions";
+import {CreateTreeRequest} from "../../Requests/Tree/CreateTreeRequest";
 
 const MAX_FILE_SIZE: number = 2_000_000;
-const SUPPORTED_FORMATS: string[] = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
+const SUPPORTED_FORMATS: string[] = ['image/jpg', 'image/jpeg', 'image/png'];
 const getSupportedFormatsString = (): string => SUPPORTED_FORMATS
     .map(x => x.replace('image/', '')).join(', ');
 
@@ -24,15 +30,10 @@ const validationSchema = yup.object({
     })
 });
 
-interface CreateTreeFormType {
-    title: string,
-    description?: string,
-    image?: File
-}
-
 const CreateTreeForm = () => {
+    const dispatch: ThunkDispatch<AuthState, any, AnyAction> = useDispatch();
     const theme = useTheme();
-    const initialValue: CreateTreeFormType = {
+    const initialValue: CreateTreeRequest = {
         title: 'My new family tree',
     };
 
@@ -41,19 +42,23 @@ const CreateTreeForm = () => {
             initialValues={initialValue}
             validationSchema={validationSchema}
             onSubmit={(values, {setSubmitting}) => {
-                alert(JSON.stringify(values, null, 2));
-                setSubmitting(false);
+                (async () => {
+                    if (values !== null) {
+                        await dispatch(treeActions.createTree(values))
+                    }
+                    setSubmitting(false);
+                })()
             }}
         >
             {({
-                  values, 
+                  values,
                   isSubmitting,
                   errors,
                   touched,
                   handleChange,
                   setFieldValue,
                   handleBlur
-            }) => (
+              }) => (
                 <Form>
                     <FileInputWithImageView
                         onChangeHandler={(e: React.ChangeEvent<HTMLInputElement> | null) => {

@@ -7,5 +7,6 @@ export const REGISTER_URL = 'register/';
 
 // TREE
 export const GET_TREE_LIST = 'trees/';
+export const CREATE_TREE = 'trees/';
 
 
