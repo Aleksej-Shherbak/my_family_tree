@@ -12,7 +12,7 @@ const initialState: TreeListState = {
 
 export const TreeListReducer: Reducer<TreeListState, TreeListAction> = (state: TreeListState = initialState, action: TreeListAction): TreeListState => {
     switch (action.type) {
-        case TreeListActionTypes.TREE_GET_LIST:
+        case TreeListActionTypes.TREE_FETCH_LIST:
             return {trees: action.trees}
         default:
             return state;

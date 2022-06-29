@@ -1,4 +1,5 @@
 using Email.Options;
+using Services.FileService;
 using WebApi.Options.Models;
 
 namespace WebApi.Options;
@@ -11,6 +12,7 @@ public static class AddOptionsExtensions
         services.Configure<EmailConfirmation>(configuration.GetSection(nameof(EmailConfirmation)));
         services.Configure<SmtpSettings>(configuration.GetSection(nameof(SmtpSettings)));
         services.Configure<AuthOptions>(configuration.GetSection(nameof(AuthOptions)));
+        services.Configure<FileStorageOptions>(configuration.GetSection(nameof(FileStorageOptions)));
         return services;
     }
 }

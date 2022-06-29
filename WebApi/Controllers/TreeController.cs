@@ -1,5 +1,4 @@
-using System.Security.Claims;
-using Dto;
+using Dto.FamilyTree;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServicesInterfaces;
@@ -12,7 +11,7 @@ namespace WebApi.Controllers;
 [Authorize]
 [Route("api/trees")]
 [ApiController]
-public class TreeController : Controller
+public class TreeController : BaseController
 {
     private readonly ITreeService _treeService;
 
@@ -22,21 +21,20 @@ public class TreeController : Controller
     }
     
     [HttpGet]
-    public IActionResult Index()
+    public async Task<FamilyTreeDtoResponse[]> Index(CancellationToken token)
     {
-        return Ok(new FamilyTreeList
-        {
-        });
+        return await _treeService.GetTrees(UserId, token);
     }
 
     [HttpPost]
     public async Task<BaseResponse<int>> Create([FromForm] FamilyTreeRequest request, CancellationToken token)
     {
-        var res = await _treeService.CreateTree(new FamilyTreeDto
+        var res = await _treeService.CreateTree(new FamilyTreeDtoRequest
         {
             Description = request.Description,
             Title = request.Title,
-            UserId = HttpContext.User.GetLoggedInUserId<int>()
+            UserId = HttpContext.User.GetLoggedInUserId<int>(),
+            Image = request.Image
         }, token);
 
         return new BaseResponse<int>

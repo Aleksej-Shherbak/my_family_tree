@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using File = Domains.File;
 
 namespace EntityFramework;
 
@@ -13,6 +14,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
     public DbSet<Husband> Husbands { get; set; }
     public DbSet<Family> Families { get; set; }
     public DbSet<PersonFact> PersonFacts { get; set; }
+    public DbSet<File> Files { get; set; }
     
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : base(options)
@@ -40,5 +42,12 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
             .HasMany(p => p.HusbandFamalies)
             .WithOne(p => p.Husband)
             .HasForeignKey(p => p.HusbandId);
+
+        modelBuilder
+            .Entity<FamilyTree>()
+            .HasOne(x => x.File)
+            .WithOne()
+            .HasForeignKey<FamilyTree>(x => x.FileId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
