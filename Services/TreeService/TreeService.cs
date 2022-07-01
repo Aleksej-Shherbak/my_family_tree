@@ -47,7 +47,9 @@ public class TreeService : ITreeService
 
     public async Task<FamilyTreeDtoResponse[]> GetTrees(int userId, CancellationToken cancellationToken)
     {
-        return await _applicationDbContext.FamilyTrees.Where(x => x.UserId == userId)
+        return await _applicationDbContext.FamilyTrees
+            .Include(x => x.File)
+            .Where(x => x.UserId == userId)
             .Select(x => x.MapToDto())
             .ToArrayAsync(cancellationToken);
     }
