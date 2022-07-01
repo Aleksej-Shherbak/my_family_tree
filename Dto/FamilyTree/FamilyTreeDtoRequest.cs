@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Dto.FamilyTree;
 
-public class FamilyTreeDtoRequest
+public record FamilyTreeDtoRequest
 {
     public int Id { get; set; }
     public string Title { get; set; }

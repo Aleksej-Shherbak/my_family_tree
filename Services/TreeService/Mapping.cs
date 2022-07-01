@@ -5,7 +5,7 @@ namespace Services.TreeService;
 
 public static class Mapping
 {
-    public static FamilyTreeDtoResponse MapToDto(this FamilyTree source, string imagePath)
+    public static FamilyTreeDtoResponse MapToDto(this FamilyTree source)
     {
         return new FamilyTreeDtoResponse
         {
@@ -13,7 +13,7 @@ public static class Mapping
             Id = source.Id,
             Title = source.Title,
             UserId = source.UserId,
-            ImagePath = imagePath
+            Image = source.File.Name
         };
     }
 }

@@ -52,7 +52,7 @@ namespace EntityFramework.Migrations
 
                     b.HasIndex("WifeId");
 
-                    b.ToTable("Families");
+                    b.ToTable("Families", (string)null);
                 });
 
             modelBuilder.Entity("Domains.FamilyTree", b =>
@@ -70,9 +70,6 @@ namespace EntityFramework.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("FileId")
-                        .HasColumnType("integer");
-
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
 
@@ -85,29 +82,9 @@ namespace EntityFramework.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FileId")
-                        .IsUnique();
-
                     b.HasIndex("UserId");
 
-                    b.ToTable("FamilyTrees");
-                });
-
-            modelBuilder.Entity("Domains.File", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Files");
+                    b.ToTable("FamilyTrees", (string)null);
                 });
 
             modelBuilder.Entity("Domains.Person", b =>
@@ -152,7 +129,7 @@ namespace EntityFramework.Migrations
 
                     b.HasIndex("ParentFamilyId");
 
-                    b.ToTable("Persons");
+                    b.ToTable("Persons", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Person");
                 });
@@ -183,7 +160,7 @@ namespace EntityFramework.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("PersonFacts");
+                    b.ToTable("PersonFacts", (string)null);
                 });
 
             modelBuilder.Entity("Domains.User", b =>
@@ -420,19 +397,11 @@ namespace EntityFramework.Migrations
 
             modelBuilder.Entity("Domains.FamilyTree", b =>
                 {
-                    b.HasOne("Domains.File", "File")
-                        .WithOne()
-                        .HasForeignKey("Domains.FamilyTree", "FileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domains.User", "User")
                         .WithMany("FamilyTrees")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("File");
 
                     b.Navigation("User");
                 });

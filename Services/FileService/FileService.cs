@@ -25,7 +25,7 @@ public class FileService: IFileService
         await formFile.CopyToAsync(stream, cancellationToken);
         var file = new File
         {
-            Name = fileName,
+            Name = fileName
         };
 
         await _dbContext.Files.AddAsync(file, cancellationToken);

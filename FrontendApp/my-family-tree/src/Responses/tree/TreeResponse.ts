@@ -1,4 +1,4 @@
-export interface Tree {
+export interface TreeResponse {
     id: number,
     title: string,
     description?: string,

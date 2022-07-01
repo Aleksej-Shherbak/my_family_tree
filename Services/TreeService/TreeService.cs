@@ -18,7 +18,7 @@ public class TreeService : ITreeService
         _fileService = fileService;
     }
     
-    public async Task<FamilyTreeDtoRequest> CreateTree(FamilyTreeDtoRequest request, CancellationToken token)
+    public async Task<FamilyTreeDtoResponse> CreateTree(FamilyTreeDtoRequest request, CancellationToken token)
     {
         var isUserFound = await _applicationDbContext.Users.AnyAsync(x => x.Id == request.UserId, token);
 
@@ -37,18 +37,18 @@ public class TreeService : ITreeService
         if (request.Image != null)
         {
             var file = await _fileService.SaveFile(request.Image, request.UserId, token);
-            newTree.FileId = file.Id;
+            newTree.FileName = file.Name;
         }
         await _applicationDbContext.FamilyTrees.AddAsync(newTree, token);
         await _applicationDbContext.SaveChangesAsync(token);
-        request.Id = newTree.Id;
-        return request;
+        
+        return newTree.MapToDto();
     }
 
     public async Task<FamilyTreeDtoResponse[]> GetTrees(int userId, CancellationToken cancellationToken)
     {
         return await _applicationDbContext.FamilyTrees.Where(x => x.UserId == userId)
-            .Select(x => x.MapToDto(_fileService.GetFileFullPath(userId, x.File.Name)))
+            .Select(x => x.MapToDto())
             .ToArrayAsync(cancellationToken);
     }
 }

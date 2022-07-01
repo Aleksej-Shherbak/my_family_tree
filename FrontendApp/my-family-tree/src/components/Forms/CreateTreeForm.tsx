@@ -10,6 +10,8 @@ import {AnyAction} from "redux";
 import {useDispatch} from "react-redux";
 import {treeActions} from "../../redux/tree/TreeActions";
 import {CreateTreeRequest} from "../../Requests/Tree/CreateTreeRequest";
+import {useNavigate} from "react-router-dom";
+import {getRoutePathByName, routeNames} from "../../router/routes";
 
 const MAX_FILE_SIZE: number = 2_000_000;
 const SUPPORTED_FORMATS: string[] = ['image/jpg', 'image/jpeg', 'image/png'];
@@ -33,6 +35,7 @@ const validationSchema = yup.object({
 const CreateTreeForm = () => {
     const dispatch: ThunkDispatch<AuthState, any, AnyAction> = useDispatch();
     const theme = useTheme();
+    const navigate = useNavigate();
     const initialValue: CreateTreeRequest = {
         title: 'My new family tree',
     };
@@ -47,6 +50,7 @@ const CreateTreeForm = () => {
                         await dispatch(treeActions.createTree(values))
                     }
                     setSubmitting(false);
+                    navigate(getRoutePathByName(routeNames.home));
                 })()
             }}
         >

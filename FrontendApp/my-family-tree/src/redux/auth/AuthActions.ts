@@ -8,7 +8,7 @@ import {RegisterRequest} from "../../Requests/Auth/RegisterRequest";
 import {BASE_URL, LOGIN_URL, LOGOUT_URL, REGISTER_URL} from "../../constants/backend";
 import {AlertAction} from "../alert/AlertTypes";
 import {User} from "../../models/User";
-import {ErrorResponse} from "../../models/ErrorResponse";
+import {ErrorResponse} from "../../Responses/ErrorResponse";
 
 export const authActions = {
     login,

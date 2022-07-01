@@ -27,7 +27,7 @@ public class TreeController : BaseController
     }
 
     [HttpPost]
-    public async Task<BaseResponse<int>> Create([FromForm] FamilyTreeRequest request, CancellationToken token)
+    public async Task<BaseResponse<FamilyTreeDtoResponse>> Create([FromForm] FamilyTreeRequest request, CancellationToken token)
     {
         var res = await _treeService.CreateTree(new FamilyTreeDtoRequest
         {
@@ -37,10 +37,10 @@ public class TreeController : BaseController
             Image = request.Image
         }, token);
 
-        return new BaseResponse<int>
+        return new BaseResponse<FamilyTreeDtoResponse>
         {
             IsSuccess = true,
-            Data = res.Id
+            Data = res
         };
     }
 }

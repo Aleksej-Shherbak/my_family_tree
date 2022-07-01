@@ -42,12 +42,12 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
             .HasMany(p => p.HusbandFamalies)
             .WithOne(p => p.Husband)
             .HasForeignKey(p => p.HusbandId);
-
+        
         modelBuilder
-            .Entity<FamilyTree>()
+            .Entity<FamilyTree>() 
             .HasOne(x => x.File)
             .WithOne()
-            .HasForeignKey<FamilyTree>(x => x.FileId)
+            .HasForeignKey<FamilyTree>(x => x.FileName)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

@@ -5,8 +5,8 @@ import {alertActions} from "../alert/AlertActions";
 import {AlertAction} from "../alert/AlertTypes";
 import {BASE_URL, CREATE_TREE, GET_TREE_LIST} from "../../constants/backend";
 import {Tree} from "../../models/tree/Tree";
-import {BaseResponse} from "../../Responses/BaseResponse";
 import {CreateTreeRequest} from "../../Requests/Tree/CreateTreeRequest";
+import {TreeResponse} from "../../Responses/tree/TreeResponse";
 
 export const treeActions = {
     treeFetchList,
@@ -41,8 +41,8 @@ function createTree(request: CreateTreeRequest) {
                 bodyFormData.append('description', request.description)
             }
             
-            const res = await axios.post<CreateTreeRequest, AxiosResponse<BaseResponse<number>>>(`${BASE_URL}${CREATE_TREE}`, bodyFormData, {withCredentials: true});
-            const tree: Tree = {...request, id: res.data.data}
+            const res = await axios.post<CreateTreeRequest, AxiosResponse<TreeResponse>>(`${BASE_URL}${CREATE_TREE}`, bodyFormData, {withCredentials: true});
+            const tree: Tree = {...res.data}
             dispatch(success(tree));
         } catch (error) {
             console.error(error);
