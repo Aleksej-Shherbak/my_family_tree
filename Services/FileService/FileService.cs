@@ -1,6 +1,5 @@
 using EntityFramework;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Options;
 using ServicesInterfaces;
 using File = Domains.File;
 
@@ -9,12 +8,12 @@ namespace Services.FileService;
 public class FileService: IFileService
 {
     private readonly ApplicationDbContext _dbContext;
-    private readonly FileStorageOptions _fileStorageOptions;
+    private readonly IFileSystemService _fileSystemService;
 
-    public FileService(IOptions<FileStorageOptions> fileStorageOptions, ApplicationDbContext dbContext)
+    public FileService(ApplicationDbContext dbContext, IFileSystemService fileSystemService)
     {
         _dbContext = dbContext;
-        _fileStorageOptions = fileStorageOptions.Value;
+        _fileSystemService = fileSystemService;
     }
     
     public async Task<File> SaveFile(IFormFile formFile, int userId, CancellationToken cancellationToken)
@@ -35,17 +34,11 @@ public class FileService: IFileService
 
     public string GetUserStoragePath(int userId)
     {
-        var path = Path.Combine(_fileStorageOptions.FileStorageFolder, userId.ToString());
-        if (!Directory.Exists(path))
-        {
-            Directory.CreateDirectory(path);
-        }
-
-        return path;
+        return _fileSystemService.GetUserStoragePath(userId);
     }
 
-    public string GetFileFullPath(int userId, string fileName)
+    public string? GetFileFullPath(int userId, string fileName)
     {
-        return Path.Combine(GetUserStoragePath(userId), fileName);
+        return _fileSystemService.GetFileFullPath(userId, fileName);
     }
 }

@@ -1,4 +1,4 @@
-namespace Services.FileService;
+namespace Dto.Options;
 
 public class FileStorageOptions
 {

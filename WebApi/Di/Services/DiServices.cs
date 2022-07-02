@@ -11,6 +11,7 @@ public static class DiServices
     {
         services.AddScoped<ITreeService, TreeService>();
         services.AddScoped<IFileService, FileService>();
+        services.AddSingleton<IFileSystemService, FileSystemService>();
         return services;
     }
 }
