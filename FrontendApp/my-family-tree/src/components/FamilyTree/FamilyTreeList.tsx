@@ -8,6 +8,7 @@ import {getRoutePathByName, routeNames} from "../../router/routes";
 import {AppDispatch} from "../../redux/RootReducer";
 import {TreeListState} from "../../redux/tree/TreeListReducer";
 import {IAppState} from "../../redux/AppStateTypes";
+import {getFileUrl} from "../../helpers/urlHelpers";
 
 const mapStateToProps = (state: IAppState) => state.trees;
 
@@ -20,9 +21,15 @@ const FamilyTreeList: React.FC<TreeListState> = ({trees}) => {
         })()
     }, []);
     
-    const treesElements = trees?.map(({id, title, description}) =>
+    const treesElements = trees?.map(({id, title, description, image}) =>
         <Grid key={id} item xs={6} sm={4} md={3} lg={3} xl={3}>
-            <FamilyTreeItem title={title} description={description ?? ''}/>
+            {
+                image ?
+                    <FamilyTreeItem title={title} imageUrl={getFileUrl(image)} description={description ?? ''}/>
+                    :
+                    // TODO use default props instead of image={undefined}
+                    <FamilyTreeItem title={title} imageUrl={undefined} description={description ?? ''}/>
+            }
         </Grid>);
 
     return (

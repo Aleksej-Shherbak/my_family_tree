@@ -1,7 +1,9 @@
+using Dto.Options;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using WebApi.Options.Models;
 
-namespace WebApi.Middlewares;
+namespace Infrastructure.Middlewares;
 
 /// <summary>
 /// Adds JWT token from cookie to HTTP Authorization header if it exists.

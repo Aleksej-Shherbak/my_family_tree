@@ -1,9 +1,10 @@
 using Domains;
 using Email;
 using EntityFramework;
+using Infrastructure.Di.Cors;
+using Infrastructure.Middlewares;
 using Microsoft.AspNetCore.Identity;
 using WebApi.Di.Auth;
-using WebApi.Di.Cors;
 using WebApi.Di.Services;
 using WebApi.Di.Swagger;
 using WebApi.Middlewares;

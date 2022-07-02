@@ -1,15 +1,18 @@
+using Infrastructure.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using ServicesInterfaces;
 
 namespace FileStorage.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class FileController : ControllerBase
 {
     private readonly IFileSystemService _fileSystemService;
-
+    private int UserId => HttpContext.User.GetLoggedInUserId<int>();
     public FileController(IFileSystemService fileSystemService)
     {
         _fileSystemService = fileSystemService;
@@ -18,8 +21,7 @@ public class FileController : ControllerBase
     [HttpGet("{name}")]
     public IActionResult Get(string name)
     {
-        // TODO get user id from JWT
-        var filePath = _fileSystemService.GetFileFullPath(16, name);
+        var filePath = _fileSystemService.GetFileFullPath(UserId, name);
 
         if (string.IsNullOrWhiteSpace(filePath) ||
             !new FileExtensionContentTypeProvider().TryGetContentType(filePath, out var contentType))

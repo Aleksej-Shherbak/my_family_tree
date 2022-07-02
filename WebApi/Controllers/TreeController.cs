@@ -1,10 +1,10 @@
 using Dto.FamilyTree;
+using Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServicesInterfaces;
 using WebApi.Dto;
 using WebApi.Dto.Tree;
-using WebApi.Infrastructure.Extensions;
 
 namespace WebApi.Controllers;
 

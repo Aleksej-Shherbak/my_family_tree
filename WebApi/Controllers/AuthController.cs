@@ -1,9 +1,9 @@
+using Dto.Options;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WebApi.Dto;
 using WebApi.Dto.Auth;
 using WebApi.Mapping.Auth;
-using WebApi.Options.Models;
 using WebApi.Services.Auth;
 
 namespace WebApi.Controllers;

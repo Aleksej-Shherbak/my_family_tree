@@ -1,14 +1,16 @@
-namespace WebApi.Di.Cors;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Infrastructure.Di.Cors;
 
 public static class DiCors
 {
-    public static IServiceCollection AddCorsConfiguration(this IServiceCollection services)
+    public static IServiceCollection AddCorsConfiguration(this IServiceCollection services, string? url = null)
     {
         services.AddCors(options =>
         {
             options.AddDefaultPolicy(policy  =>
             {
-                policy.WithOrigins("http://localhost:3000")
+                policy.WithOrigins(url ?? "http://localhost:3000")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials();

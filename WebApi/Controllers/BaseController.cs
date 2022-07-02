@@ -1,5 +1,5 @@
+using Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Infrastructure.Extensions;
 
 namespace WebApi.Controllers;
 

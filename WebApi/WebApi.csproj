@@ -27,4 +27,9 @@
       <_ContentIncludedByDefault Remove="Pages\AccountConfirmation\ConfirmAccount.cshtml" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Di\Cors" />
+      <Folder Include="Options\Models" />
+    </ItemGroup>
+
 </Project>

@@ -9,4 +9,5 @@ export const REGISTER_URL = 'register/';
 export const GET_TREE_LIST = 'trees/';
 export const CREATE_TREE = 'trees/';
 
-
+// FILE STORAGE
+export const FILE_STORAGE_URL = 'http://localhost:5201/file'
