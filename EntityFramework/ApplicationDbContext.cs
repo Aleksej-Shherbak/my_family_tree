@@ -15,6 +15,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
     public DbSet<Family> Families { get; set; }
     public DbSet<PersonFact> PersonFacts { get; set; }
     public DbSet<File> Files { get; set; }
+    public DbSet<Image> Images { get; set; }
     
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
     : base(options)
@@ -47,7 +48,7 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
             .Entity<FamilyTree>() 
             .HasOne(x => x.File)
             .WithOne()
-            .HasForeignKey<FamilyTree>(x => x.FileName)
+            .HasForeignKey<FamilyTree>(x => x.FileId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

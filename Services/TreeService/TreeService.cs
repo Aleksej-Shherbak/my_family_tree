@@ -36,8 +36,8 @@ public class TreeService : ITreeService
         };
         if (request.Image != null)
         {
-            var file = await _fileService.SaveFile(request.Image, request.UserId, token);
-            newTree.FileName = file.Name;
+            var file = await _fileService.SaveImage(request.Image, request.UserId, token);
+            newTree.FileId = file.Id;
         }
         await _applicationDbContext.FamilyTrees.AddAsync(newTree, token);
         await _applicationDbContext.SaveChangesAsync(token);

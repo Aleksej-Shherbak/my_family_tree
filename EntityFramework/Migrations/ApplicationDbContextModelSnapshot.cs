@@ -70,9 +70,8 @@ namespace EntityFramework.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("FileId")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnType("boolean");
@@ -86,7 +85,7 @@ namespace EntityFramework.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FileName")
+                    b.HasIndex("FileId")
                         .IsUnique();
 
                     b.HasIndex("UserId");
@@ -96,12 +95,25 @@ namespace EntityFramework.Migrations
 
             modelBuilder.Entity("Domains.File", b =>
                 {
-                    b.Property<string>("Name")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Name");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Files");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("File");
                 });
 
             modelBuilder.Entity("Domains.Person", b =>
@@ -386,6 +398,17 @@ namespace EntityFramework.Migrations
                     b.HasDiscriminator().HasValue("Husband");
                 });
 
+            modelBuilder.Entity("Domains.Image", b =>
+                {
+                    b.HasBaseType("Domains.File");
+
+                    b.Property<string>("PreviewName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasDiscriminator().HasValue("Image");
+                });
+
             modelBuilder.Entity("Domains.Wife", b =>
                 {
                     b.HasBaseType("Domains.Person");
@@ -416,7 +439,7 @@ namespace EntityFramework.Migrations
                 {
                     b.HasOne("Domains.File", "File")
                         .WithOne()
-                        .HasForeignKey("Domains.FamilyTree", "FileName")
+                        .HasForeignKey("Domains.FamilyTree", "FileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

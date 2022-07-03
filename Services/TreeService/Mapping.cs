@@ -13,7 +13,7 @@ public static class Mapping
             Id = source.Id,
             Title = source.Title,
             UserId = source.UserId,
-            Image = source.File.Name
+            Image = ((source.File as Image)!).PreviewName
         };
     }
 }
