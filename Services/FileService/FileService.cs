@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Domains;
 using EntityFramework;
 using Microsoft.AspNetCore.Http;
@@ -48,7 +49,7 @@ public class FileService : IFileService
         {
             Name = fileName
         };
-        
+
         if (isImage)
         {
             var image = new Image
@@ -57,7 +58,7 @@ public class FileService : IFileService
                 // TODO change it with real preview name when ffmpeg is done
                 PreviewName = fileName
             };
-            
+
             // TODO use ffmpeg to mack a thumbnail here
             await _dbContext.Images.AddAsync(image, cancellationToken);
             file = image;
@@ -69,5 +70,39 @@ public class FileService : IFileService
 
         await _dbContext.SaveChangesAsync(cancellationToken);
         return file;
+    }
+
+    private async Task<string> MakePreviewImage(int userId, string fileName, CancellationToken cancellationToken)
+    {
+        var inputFilePath = GetFileFullPath(userId, fileName);
+        var outputFileName = $"{Guid.NewGuid().ToString()}{Path.GetExtension(fileName)}";
+        var outputFilePath = Path.Combine(GetUserStoragePath(userId), "previews", outputFileName);
+        try
+        {
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = ffmpegPath,
+                Arguments =
+                    $"-y -i {inputFilePath} -an -vf scale=540x380 {outputConvertedVideoPath} -ss 00:00:00 -vframes 1 -vf scale=540x380 {outputThumbnailPath}",
+                CreateNoWindow = true,
+                UseShellExecute = false
+            };
+
+            using var process = new Process { StartInfo = startInfo };
+            process.Start();
+            await process.WaitForExitAsync(cancellationToken);
+
+            if (!System.IO.File.Exists())
+            {
+                throw new Exception(
+                    $"FFMPEG failed to generate converted video with given params: input path {inputPath}, output path: {outputConvertedVideoPath}");
+            }
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Preview image processing failed. Input file: {0}", fileName);
+        }
+
+        return outputFileName;
     }
 }
