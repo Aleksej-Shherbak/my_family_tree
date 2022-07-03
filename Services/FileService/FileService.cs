@@ -1,7 +1,10 @@
+using System.ComponentModel;
 using System.Diagnostics;
 using Domains;
 using EntityFramework;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using ServicesInterfaces;
 using File = Domains.File;
 
@@ -11,13 +14,22 @@ public class FileService : IFileService
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly IFileSystemService _fileSystemService;
+    private readonly ILogger<FileService> _logger;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
-    public FileService(ApplicationDbContext dbContext, IFileSystemService fileSystemService)
+    public FileService(
+        ApplicationDbContext dbContext, 
+        IFileSystemService fileSystemService,
+        ILogger<FileService> logger,
+        IWebHostEnvironment webHostEnvironment
+        ) 
     {
         _dbContext = dbContext;
         _fileSystemService = fileSystemService;
+        _logger = logger;
+        _webHostEnvironment = webHostEnvironment;
     }
-
+    
     public async Task<File> SaveFile(IFormFile formFile, int userId, CancellationToken cancellationToken)
     {
         return await SaveFileInternal(formFile, userId, cancellationToken);
@@ -43,8 +55,11 @@ public class FileService : IFileService
     {
         var fileName = $"{Guid.NewGuid()}{Path.GetExtension(formFile.FileName)}";
         var filePath = Path.Combine(GetUserStoragePath(userId), fileName);
-        await using var stream = System.IO.File.Create(filePath);
-        await formFile.CopyToAsync(stream, cancellationToken);
+        await using (var stream = System.IO.File.Create(filePath))
+        {
+            await formFile.CopyToAsync(stream, cancellationToken);
+        }
+
         var file = new File
         {
             Name = fileName
@@ -52,14 +67,13 @@ public class FileService : IFileService
 
         if (isImage)
         {
+            var previewImageFileName = await MakePreviewImage(userId, fileName, cancellationToken);
             var image = new Image
             {
                 Name = fileName,
-                // TODO change it with real preview name when ffmpeg is done
-                PreviewName = fileName
+                PreviewName = previewImageFileName
             };
 
-            // TODO use ffmpeg to mack a thumbnail here
             await _dbContext.Images.AddAsync(image, cancellationToken);
             file = image;
         }
@@ -72,18 +86,26 @@ public class FileService : IFileService
         return file;
     }
 
+    private string FfmpegPath => Path.Combine(_webHostEnvironment.ContentRootPath, "Ffmpeg", "ffmpeg.exe");
+
     private async Task<string> MakePreviewImage(int userId, string fileName, CancellationToken cancellationToken)
     {
         var inputFilePath = GetFileFullPath(userId, fileName);
-        var outputFileName = $"{Guid.NewGuid().ToString()}{Path.GetExtension(fileName)}";
-        var outputFilePath = Path.Combine(GetUserStoragePath(userId), "previews", outputFileName);
+        
+        var outputFileName = $"preview_{Guid.NewGuid().ToString()}{Path.GetExtension(fileName)}";
+        var outputFilePath = Path.Combine(GetUserStoragePath(userId), outputFileName);
         try
         {
+            if (!System.IO.File.Exists(inputFilePath))
+            {
+                throw new InvalidEnumArgumentException($"File not found. File path: {inputFilePath}");
+            }
+            
             var startInfo = new ProcessStartInfo
             {
-                FileName = ffmpegPath,
+                FileName = FfmpegPath,
                 Arguments =
-                    $"-y -i {inputFilePath} -an -vf scale=540x380 {outputConvertedVideoPath} -ss 00:00:00 -vframes 1 -vf scale=540x380 {outputThumbnailPath}",
+                    $"-i {inputFilePath} -vf scale=320:240 {outputFilePath}",
                 CreateNoWindow = true,
                 UseShellExecute = false
             };
@@ -92,10 +114,10 @@ public class FileService : IFileService
             process.Start();
             await process.WaitForExitAsync(cancellationToken);
 
-            if (!System.IO.File.Exists())
+            if (!System.IO.File.Exists(outputFilePath))
             {
                 throw new Exception(
-                    $"FFMPEG failed to generate converted video with given params: input path {inputPath}, output path: {outputConvertedVideoPath}");
+                    $"FFMPEG failed to generate preview image. Input path {inputFilePath}, output path: {outputFilePath}");
             }
         }
         catch (Exception e)
