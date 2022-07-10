@@ -14,7 +14,12 @@ export const authActions = {
     login,
     logout,
     register,
+    eraseUserData,
 };
+
+function eraseUserData(): AuthAction {
+    return {type: AuthTypes.ERASE_USER_DATA, user: null}
+}
 
 function login(request: LoginRequest) {
     return async (dispatch: Dispatch<AuthAction|AlertAction>): Promise<void> => {

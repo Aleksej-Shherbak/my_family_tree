@@ -12,9 +12,9 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import {Link} from "react-router-dom";
 import styles from './MainLayout.module.scss';
 import {AppBar, Drawer} from "@mui/material";
-import IChildrenContainer from "../../infrastructure/IChildrenContainer";
 import MenuItems from "../../components/Menu/MenuItems";
 import AlertComponent from "../../components/Alert/AlertComponent";
+import IChildrenContainer from "../../types/IChildrenContainer";
 
 const MainLayout: FC<IChildrenContainer> = ({children}) => {
     const [open, setOpen] = React.useState(false);

@@ -1,6 +1,8 @@
 import {User} from "../../models/User";
 import {AuthAction, AuthTypes} from "./AuthTypes";
 import {Reducer} from "redux";
+import axios from "axios";
+import {BASE_URL, CHECK_IS_AUTHENTICATED} from "../../constants/backend";
 
 export interface AuthState {
     user: User|null
@@ -8,7 +10,7 @@ export interface AuthState {
 
 const initialState: AuthState = {
     user: null
-}
+};
 
 const userString = localStorage.getItem('user');
 if (userString) {
@@ -27,6 +29,9 @@ export const authReducer: Reducer<AuthState, AuthAction> = (state: AuthState = i
             localStorage.removeItem('user');
             return {user: null}
         case AuthTypes.LOGOUT:
+            localStorage.removeItem('user');
+            return {user: null}
+        case AuthTypes.ERASE_USER_DATA:
             localStorage.removeItem('user');
             return {user: null}
     }

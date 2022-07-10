@@ -1,4 +1,5 @@
 using Dto.Options;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using WebApi.Dto;
@@ -53,6 +54,13 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> ConfirmAccount(ConfirmAccountRequest request)
     {
         await _authService.ConfirmEmailAsync(request);
+        return Ok();
+    }
+
+    [Authorize]
+    [HttpGet("is-authenticated")]
+    public IActionResult CheckAuthentication()
+    {
         return Ok();
     }
 }

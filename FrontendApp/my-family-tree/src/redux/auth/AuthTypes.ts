@@ -8,6 +8,7 @@ export enum AuthTypes {
     LOGOUT = 'LOGOUT',
     REGISTER_SUCCESS = 'REGISTER_SUCCESS',
     REGISTER_FAILURE = 'REGISTER_FAILURE',
+    ERASE_USER_DATA = 'ERASE_USER_DATA',
 }
 
 export interface AuthAction extends AnyAction {

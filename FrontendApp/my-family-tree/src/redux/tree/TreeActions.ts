@@ -7,6 +7,7 @@ import {BASE_URL, CREATE_TREE, GET_TREE_LIST} from "../../constants/backend";
 import {Tree} from "../../models/tree/Tree";
 import {CreateTreeRequest} from "../../Requests/Tree/CreateTreeRequest";
 import {TreeResponse} from "../../Responses/tree/TreeResponse";
+import {MakeRequest} from "../../infrastructure/http/MakeRequest";
 
 export const treeActions = {
     treeFetchList,
@@ -16,8 +17,10 @@ export const treeActions = {
 function treeFetchList() {
     return async (dispatch: Dispatch<TreeListAction | AlertAction>): Promise<void> => {
         try {
-            const res = await axios.get<Tree[]>(`${BASE_URL}${GET_TREE_LIST}`, {withCredentials: true})
-            dispatch(success(res.data));
+            const res = await MakeRequest<Tree[]>(GET_TREE_LIST, 'GET');
+            if (res !== null) {
+                dispatch(success(res.data));
+            }
         } catch (error) {
             console.error(error);
             await dispatch(alertActions.error('Unable to load trees. Please try again later.'));
@@ -40,7 +43,7 @@ function createTree(request: CreateTreeRequest) {
             if (request.description) {
                 bodyFormData.append('description', request.description)
             }
-            
+
             const res = await axios.post<CreateTreeRequest, AxiosResponse<TreeResponse>>(`${BASE_URL}${CREATE_TREE}`, bodyFormData, {withCredentials: true});
             const tree: Tree = {...res.data}
             dispatch(success(tree));
