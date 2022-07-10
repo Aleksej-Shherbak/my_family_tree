@@ -45,7 +45,7 @@ const MainLayout: FC<IChildrenContainer> = ({children}) => {
                         <MenuIcon/>
                     </IconButton>
                     <Link to="/">
-                        <Box component="img" src="logo.png" alt="My Family Tree logo" className={styles.logo}/>
+                        <Box component="img" src="/logo.png" alt="My Family Tree logo" className={styles.logo}/>
                     </Link>
                     <Typography variant="h6" noWrap component="div">
                         MY FAMILY TREE

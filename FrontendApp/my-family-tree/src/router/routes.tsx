@@ -8,6 +8,7 @@ import {OverridableComponent} from "@mui/material/OverridableComponent";
 import {SvgIconTypeMap} from "@mui/material/SvgIcon/SvgIcon";
 import Login from "../pages/Login";
 import EditTree from "../pages/tree/EditTree";
+import TreeDetail from "../pages/tree/TreeDetail";
 
 interface IRouterSideMenuItem extends IRouterItem {
     icon: OverridableComponent<SvgIconTypeMap> & { muiName: string },
@@ -28,7 +29,8 @@ export const routeNames = {
     logout: 'logout',
     register: 'register',
     
-    createNewTree: 'create-new-tree'
+    createNewTree: 'create-new-tree',
+    treeDetail: 'tree-detail'
 }
 
 export const sideBarMenuRoutes: IRouterSideMenuItem[] = [
@@ -62,12 +64,25 @@ export const sideBarMenuRoutes: IRouterSideMenuItem[] = [
 export const routes: IRouterItem[] = [
     {path: '/login', component: <Login/>, name: routeNames.login},
     {path: '/register', component: <Register/>, name: routeNames.register},
+    {path: 'tree/:id', component: <TreeDetail/>, name: routeNames.treeDetail}
 ];
 
-export const getRoutePathByName = (routeName: string): string => {
+
+export interface IGetRouterPathByNameParamItem {
+    name: string,
+    value: string
+}
+
+export const getRoutePathByName = (routeName: string, params?: IGetRouterPathByNameParamItem[] ): string => {
     const res = [...sideBarMenuRoutes, ...routes].find(({name}) => name === routeName);
     if (res === undefined) {
         return ''
     }
-    return res.path;
+    let path = res.path; 
+    if (params) {
+        for (const param of params) {
+            path = res.path.replace(`:${param.name}`, param.value) 
+        }
+    }
+    return path;
 }; 

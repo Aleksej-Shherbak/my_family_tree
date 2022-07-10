@@ -1,13 +1,17 @@
 import React, {FC} from 'react';
 import {Button, Card, CardActions, CardContent, Typography} from "@mui/material";
+import {getRoutePathByName, routeNames} from "../../router/routes";
 
 interface FamilyTreeItemProps {
+    id: number,
     title: string,
     description: string,
     imageUrl: string|undefined
 }
 
-const FamilyTreeItem: FC<FamilyTreeItemProps> = ({title, description, imageUrl}) => {
+const FamilyTreeItem: FC<FamilyTreeItemProps> = ({id, title, description, imageUrl}) => {
+    console.log(getRoutePathByName(routeNames.treeDetail,
+        [{name: 'id', value: id.toString()}]))
     return (
         <Card variant="outlined">
             <CardContent>
@@ -21,7 +25,10 @@ const FamilyTreeItem: FC<FamilyTreeItemProps> = ({title, description, imageUrl})
                 <Typography variant="body2">{description}</Typography>
             </CardContent>
             <CardActions>
-                <Button size="small">Open</Button>
+                <Button href={getRoutePathByName(routeNames.treeDetail,
+                      [{name: 'id', value: id.toString()}])}>
+                    Open
+                </Button>
             </CardActions>
         </Card>
     );};

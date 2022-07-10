@@ -25,10 +25,10 @@ const FamilyTreeList: React.FC<TreeListState> = ({trees}) => {
         <Grid key={id} item xs={6} sm={4} md={3} lg={3} xl={3}>
             {
                 image ?
-                    <FamilyTreeItem title={title} imageUrl={getFileUrl(image)} description={description ?? ''}/>
+                    <FamilyTreeItem id={id} title={title} imageUrl={getFileUrl(image)} description={description ?? ''}/>
                     :
                     // TODO use default props instead of image={undefined}
-                    <FamilyTreeItem title={title} imageUrl={undefined} description={description ?? ''}/>
+                    <FamilyTreeItem id={id} title={title} imageUrl={undefined} description={description ?? ''}/>
             }
         </Grid>);
 
