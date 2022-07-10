@@ -2,13 +2,13 @@ using Dto.Options;
 using Microsoft.Extensions.Options;
 using ServicesInterfaces;
 
-namespace Services.FileService;
+namespace Services.FileServices;
 
-public class FileSystemService: IFileSystemService
+public class FilePathService: IFilePathService
 {
     private readonly FileStorageOptions _fileStorageOptions;
 
-    public FileSystemService(IOptions<FileStorageOptions> fileStorageOptions)
+    public FilePathService(IOptions<FileStorageOptions> fileStorageOptions)
     {
         _fileStorageOptions = fileStorageOptions.Value;
     }

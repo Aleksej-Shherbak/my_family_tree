@@ -3,6 +3,7 @@ using System;
 using EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EntityFramework.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220705162446_UpdateFamilyTable")]
+    partial class UpdateFamilyTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,9 +35,6 @@ namespace EntityFramework.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<int?>("FamilyTreeId")
-                        .HasColumnType("integer");
-
                     b.Property<int?>("HusbandId")
                         .HasColumnType("integer");
 
@@ -50,8 +49,6 @@ namespace EntityFramework.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FamilyTreeId");
 
                     b.HasIndex("HusbandId");
 
@@ -129,9 +126,6 @@ namespace EntityFramework.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AvatarId")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -139,38 +133,32 @@ namespace EntityFramework.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("FamilyTreeId")
+                    b.Property<int>("FamilyTreeId")
                         .HasColumnType("integer");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("Gender")
+                    b.Property<int>("Gender")
                         .HasColumnType("integer");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("MiddleName")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("ParentFamilyId")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("UserId")
+                    b.Property<int>("ParentFamilyId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AvatarId")
-                        .IsUnique();
-
                     b.HasIndex("FamilyTreeId");
 
                     b.HasIndex("ParentFamilyId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Persons");
 
@@ -432,11 +420,6 @@ namespace EntityFramework.Migrations
 
             modelBuilder.Entity("Domains.Family", b =>
                 {
-                    b.HasOne("Domains.FamilyTree", "FamilyTree")
-                        .WithMany("Family")
-                        .HasForeignKey("FamilyTreeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Domains.Husband", "Husband")
                         .WithMany("HusbandFamalies")
                         .HasForeignKey("HusbandId");
@@ -444,8 +427,6 @@ namespace EntityFramework.Migrations
                     b.HasOne("Domains.Wife", "Wife")
                         .WithMany("WifeFamilies")
                         .HasForeignKey("WifeId");
-
-                    b.Navigation("FamilyTree");
 
                     b.Navigation("Husband");
 
@@ -473,31 +454,21 @@ namespace EntityFramework.Migrations
 
             modelBuilder.Entity("Domains.Person", b =>
                 {
-                    b.HasOne("Domains.File", "Avatar")
-                        .WithOne()
-                        .HasForeignKey("Domains.Person", "AvatarId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Domains.FamilyTree", "FamilyTree")
                         .WithMany()
-                        .HasForeignKey("FamilyTreeId");
+                        .HasForeignKey("FamilyTreeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domains.Family", "ParentFamily")
                         .WithMany("Children")
-                        .HasForeignKey("ParentFamilyId");
-
-                    b.HasOne("Domains.User", "User")
-                        .WithMany("Persons")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("Avatar");
+                        .HasForeignKey("ParentFamilyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("FamilyTree");
 
                     b.Navigation("ParentFamily");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domains.PersonFact", b =>
@@ -567,11 +538,6 @@ namespace EntityFramework.Migrations
                     b.Navigation("Children");
                 });
 
-            modelBuilder.Entity("Domains.FamilyTree", b =>
-                {
-                    b.Navigation("Family");
-                });
-
             modelBuilder.Entity("Domains.Person", b =>
                 {
                     b.Navigation("PersonFacts");
@@ -580,8 +546,6 @@ namespace EntityFramework.Migrations
             modelBuilder.Entity("Domains.User", b =>
                 {
                     b.Navigation("FamilyTrees");
-
-                    b.Navigation("Persons");
                 });
 
             modelBuilder.Entity("Domains.Husband", b =>

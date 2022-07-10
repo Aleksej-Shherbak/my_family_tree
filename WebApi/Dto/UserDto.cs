@@ -1,6 +1,6 @@
 namespace WebApi.Dto;
 
-public class UserDto
+public record UserDto
 {
     public int Id { get; set; }
     public string Email { get; set; }

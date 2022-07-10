@@ -50,5 +50,26 @@ public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<int>, i
             .WithOne()
             .HasForeignKey<FamilyTree>(x => x.FileId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder
+            .Entity<FamilyTree>() 
+            .HasMany(x => x.Family)
+            .WithOne(x => x.FamilyTree)
+            .HasForeignKey(x => x.FamilyTreeId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder
+            .Entity<Person>()
+            .HasOne(x => x.Avatar)
+            .WithOne()
+            .HasForeignKey<Person>(x => x.AvatarId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder
+            .Entity<Person>()
+            .HasOne(x => x.User)
+            .WithMany(x => x.Persons)
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

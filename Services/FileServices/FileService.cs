@@ -8,64 +8,40 @@ using Microsoft.Extensions.Logging;
 using ServicesInterfaces;
 using File = Domains.File;
 
-namespace Services.FileService;
+namespace Services.FileServices;
 
 public class FileService : IFileService
 {
     private readonly ApplicationDbContext _dbContext;
-    private readonly IFileSystemService _fileSystemService;
+    private readonly IFilePathService _filePathService;
     private readonly ILogger<FileService> _logger;
     private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly string[] _allowedImages = new[] { ".jpg", ".png", ".jpeg" };
 
     public FileService(
         ApplicationDbContext dbContext, 
-        IFileSystemService fileSystemService,
+        IFilePathService filePathService,
         ILogger<FileService> logger,
         IWebHostEnvironment webHostEnvironment
         ) 
     {
         _dbContext = dbContext;
-        _fileSystemService = fileSystemService;
+        _filePathService = filePathService;
         _logger = logger;
         _webHostEnvironment = webHostEnvironment;
     }
     
     public async Task<File> SaveFile(IFormFile formFile, int userId, CancellationToken cancellationToken)
     {
-        return await SaveFileInternal(formFile, userId, cancellationToken);
-    }
-
-    public async Task<File> SaveImage(IFormFile file, int userId, CancellationToken cancellationToken)
-    {
-        return await SaveFileInternal(file, userId, cancellationToken, isImage: true);
-    }
-
-    public string GetUserStoragePath(int userId)
-    {
-        return _fileSystemService.GetUserStoragePath(userId);
-    }
-
-    public string? GetFileFullPath(int userId, string fileName)
-    {
-        return _fileSystemService.GetFileFullPath(userId, fileName);
-    }
-
-    private async Task<File> SaveFileInternal(IFormFile formFile, int userId, CancellationToken cancellationToken,
-        bool isImage = false)
-    {
-        var fileName = $"{Guid.NewGuid()}{Path.GetExtension(formFile.FileName)}";
+        var fileExtension = Path.GetExtension(formFile.FileName);
+        var fileName = $"{Guid.NewGuid()}{fileExtension}";
         var filePath = Path.Combine(GetUserStoragePath(userId), fileName);
         await using (var stream = System.IO.File.Create(filePath))
         {
             await formFile.CopyToAsync(stream, cancellationToken);
         }
-
-        var file = new File
-        {
-            Name = fileName
-        };
-
-        if (isImage)
+        
+        if (_allowedImages.Contains(fileExtension))
         {
             var previewImageFileName = await MakePreviewImage(userId, fileName, cancellationToken);
             var image = new Image
@@ -75,15 +51,54 @@ public class FileService : IFileService
             };
 
             await _dbContext.Images.AddAsync(image, cancellationToken);
-            file = image;
-        }
-        else
-        {
-            await _dbContext.Files.AddAsync(file, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            return image;
         }
 
+        var file = new File
+        {
+            Name = fileName
+        };
+        
+        await _dbContext.Files.AddAsync(file, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return file;
+    }
+
+    public async Task DropFile(File file, int userId, CancellationToken cancellationToken)
+    {
+        DeleteFileIfExists(file.Name, userId);
+
+        if (file is Image image)
+        {
+            DeleteFileIfExists(image.PreviewName, userId);
+            _dbContext.Images.Remove(image);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            return;
+        }
+        
+        _dbContext.Files.Remove(file);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public string GetUserStoragePath(int userId)
+    {
+        return _filePathService.GetUserStoragePath(userId);
+    }
+
+    public string? GetFileFullPath(int userId, string fileName)
+    {
+        return _filePathService.GetFileFullPath(userId, fileName);
+    }
+
+    private void DeleteFileIfExists(string name, int userId)
+    {
+        var filePath = _filePathService.GetFileFullPath(userId, name);
+        if (string.IsNullOrWhiteSpace(filePath))
+        {
+            return;
+        }
+        System.IO.File.Delete(filePath);
     }
 
     private string FfmpegPath => Path.Combine(_webHostEnvironment.ContentRootPath, "Ffmpeg", "ffmpeg.exe");

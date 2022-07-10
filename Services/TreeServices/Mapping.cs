@@ -1,7 +1,7 @@
 using Domains;
 using Dto.FamilyTree;
 
-namespace Services.TreeService;
+namespace Services.TreeServices;
 
 public static class Mapping
 {

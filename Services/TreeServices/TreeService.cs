@@ -5,7 +5,7 @@ using Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using ServicesInterfaces;
 
-namespace Services.TreeService;
+namespace Services.TreeServices;
 
 public class TreeService : ITreeService
 {
@@ -18,39 +18,42 @@ public class TreeService : ITreeService
         _fileService = fileService;
     }
     
-    public async Task<FamilyTreeDtoResponse> CreateTree(FamilyTreeDtoRequest request, CancellationToken token)
+    public async Task<FamilyTreeDtoResponse> CreateTree(int userId, FamilyTreeDtoRequest request, CancellationToken cancellationToken)
     {
-        var isUserFound = await _applicationDbContext.Users.AnyAsync(x => x.Id == request.UserId, token);
-
-        if (!isUserFound)
-        {
-            throw new MyFamilyTreeNotFoundException($"User not with id: {request.UserId} found.");
-        }
-        
         var newTree = new FamilyTree
         {
             Description = request.Description,
             Title = request.Title,
-            UserId = request.UserId,
+            UserId = userId,
             CreateAt = DateTime.UtcNow
         };
         if (request.Image != null)
         {
-            var file = await _fileService.SaveImage(request.Image, request.UserId, token);
+            var file = await _fileService.SaveFile(request.Image, userId, cancellationToken);
             newTree.FileId = file.Id;
         }
-        await _applicationDbContext.FamilyTrees.AddAsync(newTree, token);
-        await _applicationDbContext.SaveChangesAsync(token);
+        await _applicationDbContext.FamilyTrees.AddAsync(newTree, cancellationToken);
+        await _applicationDbContext.SaveChangesAsync(cancellationToken);
         
         return newTree.MapToDto();
     }
 
     public async Task<FamilyTreeDtoResponse[]> GetTrees(int userId, CancellationToken cancellationToken)
     {
-        return await _applicationDbContext.FamilyTrees
+        return (await _applicationDbContext.FamilyTrees
             .Include(x => x.File)
             .Where(x => x.UserId == userId)
+            .ToArrayAsync(cancellationToken))
             .Select(x => x.MapToDto())
-            .ToArrayAsync(cancellationToken);
+            .ToArray();
+    }
+
+    public async Task<FamilyTreeDtoResponse?> GetTree(int userId, int treeId, CancellationToken cancellationToken)
+    {
+        return (await _applicationDbContext.FamilyTrees
+            .Include(x => x.File)
+            .Where(x => x.UserId == userId && x.Id == treeId)
+            .FirstOrDefaultAsync(cancellationToken))
+            ?.MapToDto();
     }
 }

@@ -11,17 +11,17 @@ namespace FileStorage.Controllers;
 [Route("[controller]")]
 public class FileController : ControllerBase
 {
-    private readonly IFileSystemService _fileSystemService;
+    private readonly IFilePathService _filePathService;
     private int UserId => HttpContext.User.GetLoggedInUserId<int>();
-    public FileController(IFileSystemService fileSystemService)
+    public FileController(IFilePathService filePathService)
     {
-        _fileSystemService = fileSystemService;
+        _filePathService = filePathService;
     }
 
     [HttpGet("{name}")]
     public IActionResult Get(string name)
     {
-        var filePath = _fileSystemService.GetFileFullPath(UserId, name);
+        var filePath = _filePathService.GetFileFullPath(UserId, name);
 
         if (string.IsNullOrWhiteSpace(filePath) ||
             !new FileExtensionContentTypeProvider().TryGetContentType(filePath, out var contentType))

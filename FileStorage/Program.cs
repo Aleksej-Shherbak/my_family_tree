@@ -1,7 +1,7 @@
 using Dto.Options;
 using Infrastructure.Di.Auth;
 using Infrastructure.Middlewares;
-using Services.FileService;
+using Services.FileServices;
 using ServicesInterfaces;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +11,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddSingleton<IFileSystemService, FileSystemService>();
+builder.Services.AddSingleton<IFilePathService, FilePathService>();
 builder.Services.Configure<FileStorageOptions>(builder.Configuration.GetSection(nameof(FileStorageOptions)));
 builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection(nameof(AuthOptions)));
 

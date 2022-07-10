@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace Domains;
 
 public class FamilyTree
@@ -13,4 +11,5 @@ public class FamilyTree
     public string Description { get; set; }
     public DateTime CreateAt { get; set; }
     public bool IsPublic { get; set; }
+    public List<Family> Family { get; set; }
 }

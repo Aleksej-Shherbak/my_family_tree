@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
-namespace WebApi.Attributes;
+namespace Dto.Attributes;
 
 public class AllowedExtensionsAttribute : ValidationAttribute
 {

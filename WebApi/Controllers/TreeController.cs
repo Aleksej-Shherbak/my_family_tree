@@ -3,8 +3,6 @@ using Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServicesInterfaces;
-using WebApi.Dto;
-using WebApi.Dto.Tree;
 
 namespace WebApi.Controllers;
 
@@ -27,20 +25,9 @@ public class TreeController : BaseController
     }
 
     [HttpPost]
-    public async Task<BaseResponse<FamilyTreeDtoResponse>> Create([FromForm] FamilyTreeRequest request, CancellationToken token)
+    public async Task<FamilyTreeDtoResponse> Create([FromForm] FamilyTreeDtoRequest request, CancellationToken cancellationToken)
     {
-        var res = await _treeService.CreateTree(new FamilyTreeDtoRequest
-        {
-            Description = request.Description,
-            Title = request.Title,
-            UserId = HttpContext.User.GetLoggedInUserId<int>(),
-            Image = request.Image
-        }, token);
-
-        return new BaseResponse<FamilyTreeDtoResponse>
-        {
-            IsSuccess = true,
-            Data = res
-        };
+        var userId = HttpContext.User.GetLoggedInUserId<int>();
+        return await _treeService.CreateTree(userId, request, cancellationToken);
     }
 }

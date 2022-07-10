@@ -1,6 +1,5 @@
 using Dto.Options;
 using Email.Options;
-using Services.FileService;
 
 namespace WebApi.Options;
 

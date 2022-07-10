@@ -1,6 +1,7 @@
-using Services;
-using Services.FileService;
-using Services.TreeService;
+using Services.FamilyServices;
+using Services.FileServices;
+using Services.PersonServices;
+using Services.TreeServices;
 using ServicesInterfaces;
 
 namespace WebApi.Di.Services;
@@ -11,7 +12,9 @@ public static class DiServices
     {
         services.AddScoped<ITreeService, TreeService>();
         services.AddScoped<IFileService, FileService>();
-        services.AddSingleton<IFileSystemService, FileSystemService>();
+        services.AddScoped<IFamilyService, FamilyService>();
+        services.AddScoped<IFilePathService, FilePathService>();
+        services.AddScoped<IPersonService, PersonService>();
         return services;
     }
 }

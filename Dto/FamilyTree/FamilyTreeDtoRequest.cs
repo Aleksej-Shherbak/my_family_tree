@@ -1,12 +1,15 @@
+using System.ComponentModel.DataAnnotations;
+using Dto.Attributes;
 using Microsoft.AspNetCore.Http;
 
 namespace Dto.FamilyTree;
 
 public record FamilyTreeDtoRequest
 {
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public int UserId { get; set; }
+    [Required]
+    public string Title { get; set; } = null!;
+    public string? Description { get; set; }
+    [MaxFileSize(5 * 1024 * 1024)]
+    [AllowedExtensions(new[] { ".jpg", ".png", ".jpeg" })]
     public IFormFile? Image { get; set; }
 }
