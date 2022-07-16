@@ -1,11 +1,11 @@
 import {AnyAction} from "redux";
-import { Tree } from "../../models/tree/Tree";
+import { Tree } from "../../models/Tree";
 
 export interface TreeListAction extends AnyAction {
     trees: Tree[]
 }
 
-export enum TreeListActionTypes {
+export enum TreeActionTypes {
     TREES_LOADING = 'TREES_LOADING',
     TREES_LOADING_FINISHED = 'TREES_LOADING_FINISHED',
     TREE_FETCH_LIST = 'TREE_FETCH_LIST',

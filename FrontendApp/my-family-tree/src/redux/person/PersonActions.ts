@@ -1,38 +1,35 @@
 import {Dispatch} from "redux";
-import {TreeListAction, TreeActionTypes} from "./TreeTypes";
-import axios, {AxiosResponse} from "axios";
 import {alertActions} from "../alert/AlertActions";
 import {AlertAction} from "../alert/AlertTypes";
-import {BASE_URL, CREATE_TREE, GET_TREE_LIST} from "../../constants/backend";
-import {CreateTreeRequest} from "../../Requests/Tree/CreateTreeRequest";
-import {TreeResponse} from "../../Responses/tree/TreeResponse";
+import {GET_PERSON_LIST} from "../../constants/backend";
 import {MakeRequest} from "../../infrastructure/http/MakeRequest";
-import {Tree} from "../../models/Tree";
+import {Person} from "../../models/Person";
+import {PersonActionTypes, PersonsAction} from "./PersonTypes";
 
-export const treeActions = {
-    treeFetchList,
-    createTree
+export const personActions = {
+    fetchList,
+//    create
 }
 
-function treeFetchList() {
-    return async (dispatch: Dispatch<TreeListAction | AlertAction>): Promise<void> => {
+function fetchList() {
+    return async (dispatch: Dispatch<PersonsAction | AlertAction>): Promise<void> => {
         try {
-            const res = await MakeRequest<Tree[]>(GET_TREE_LIST, 'GET');
+            const res = await MakeRequest<Person[]>(GET_PERSON_LIST, 'GET');
             if (res !== null) {
                 dispatch(success(res.data));
             }
         } catch (error) {
             console.error(error);
-            await dispatch(alertActions.error('Unable to load trees. Please try again later.'));
+            await dispatch(alertActions.error('Unable to load persons. Please try again later.'));
         }
     }
 
-    function success(trees: Tree[]): TreeListAction {
-        return {type: TreeActionTypes.TREE_FETCH_LIST, trees}
+    function success(items: Person[]): PersonsAction {
+        return {type: PersonActionTypes.PERSONS_FETCH, persons: items}
     }
 }
 
-function createTree(request: CreateTreeRequest) {
+/*function create(request: CreateTreeRequest) {
     return async (dispatch: Dispatch<TreeListAction | AlertAction>): Promise<void> => {
         try {
             const bodyFormData = new FormData();
@@ -54,6 +51,6 @@ function createTree(request: CreateTreeRequest) {
     }
 
     function success(trees: Tree[]): TreeListAction {
-        return {type: TreeActionTypes.TREE_ADD, trees};
+        return {type: TreeListActionTypes.TREE_ADD, trees};
     }
-}
+}*/

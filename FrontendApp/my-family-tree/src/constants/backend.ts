@@ -10,5 +10,8 @@ export const CHECK_IS_AUTHENTICATED = 'is-authenticated/';
 export const GET_TREE_LIST = 'trees/';
 export const CREATE_TREE = 'trees/';
 
+// PERSON
+export const GET_PERSON_LIST = 'persons/';
+
 // FILE STORAGE
 export const FILE_STORAGE_URL = 'http://localhost:5201/file'

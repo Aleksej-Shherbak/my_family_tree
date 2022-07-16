@@ -4,6 +4,7 @@ import AppRouter from "./router/AppRouter";
 import {AppDispatch} from "./redux/RootReducer";
 import {useDispatch} from "react-redux";
 import {treeActions} from "./redux/tree/TreeActions";
+import {personActions} from "./redux/person/PersonActions";
 
 const Main: React.FC = () => {
     const dispatch: AppDispatch = useDispatch();
@@ -12,6 +13,7 @@ const Main: React.FC = () => {
         (async () => {
             // INITIALIZE ALL GLOBAL AND DEFAULT DATA HERE
             await dispatch(treeActions.treeFetchList());
+            await dispatch(personActions.fetchList());
         })()
     }, []);
     
