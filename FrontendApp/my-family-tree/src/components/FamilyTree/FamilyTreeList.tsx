@@ -5,7 +5,6 @@ import {Grid, Typography} from "@mui/material";
 import FamilyTreeItem from "./FamilyTreeItem";
 import {Link} from "react-router-dom";
 import {getRoutePathByName, routeNames} from "../../router/routes";
-import {AppDispatch} from "../../redux/RootReducer";
 import {TreesState} from "../../redux/tree/TreeReducer";
 import {IAppState} from "../../redux/AppStateTypes";
 import {getFileUrl} from "../../helpers/urlHelpers";
@@ -13,14 +12,6 @@ import {getFileUrl} from "../../helpers/urlHelpers";
 const mapStateToProps = (state: IAppState) => state.trees;
 
 const FamilyTreeList: React.FC<TreesState> = ({trees}) => {
-    
-    const dispatch: AppDispatch = useDispatch();
-
-    useEffect(() => {
-       (async () => {
-            await dispatch(treeActions.treeFetchList());
-        })()
-    }, []);
     
     const treesElements = trees?.map(({id, title, description, image}) =>
         <Grid key={id} item xs={6} sm={4} md={3} lg={3} xl={3}>
