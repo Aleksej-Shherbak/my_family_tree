@@ -10,8 +10,6 @@ interface FamilyTreeItemProps {
 }
 
 const FamilyTreeItem: FC<FamilyTreeItemProps> = ({id, title, description, imageUrl}) => {
-    console.log(getRoutePathByName(routeNames.treeDetail,
-        [{name: 'id', value: id.toString()}]))
     return (
         <Card variant="outlined">
             <CardContent>

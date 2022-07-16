@@ -1,9 +1,9 @@
 import {AuthState} from "./auth/AuthReducer";
 import {AlertState} from "./alert/AlertReducer";
-import {TreeListState} from "./tree/TreeListReducer";
+import {TreesState} from "./tree/TreeReducer";
 
 export interface IAppState {
     auth: AuthState,
     alert: AlertState,
-    trees: TreeListState
+    trees: TreesState
 }

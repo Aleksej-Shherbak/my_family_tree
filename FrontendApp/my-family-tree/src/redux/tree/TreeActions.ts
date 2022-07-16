@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {TreeAction, TreeActionTypes, TreeListAction, TreeListActionTypes} from "./TreeTypes";
+import {TreeListAction, TreeListActionTypes} from "./TreeTypes";
 import axios, {AxiosResponse} from "axios";
 import {alertActions} from "../alert/AlertActions";
 import {AlertAction} from "../alert/AlertTypes";
@@ -33,7 +33,7 @@ function treeFetchList() {
 }
 
 function createTree(request: CreateTreeRequest) {
-    return async (dispatch: Dispatch<TreeAction | AlertAction>): Promise<void> => {
+    return async (dispatch: Dispatch<TreeListAction | AlertAction>): Promise<void> => {
         try {
             const bodyFormData = new FormData();
             if (request.image) {
@@ -46,14 +46,14 @@ function createTree(request: CreateTreeRequest) {
 
             const res = await axios.post<CreateTreeRequest, AxiosResponse<TreeResponse>>(`${BASE_URL}${CREATE_TREE}`, bodyFormData, {withCredentials: true});
             const tree: Tree = {...res.data}
-            dispatch(success(tree));
+            dispatch(success([tree]));
         } catch (error) {
             console.error(error);
             await dispatch(alertActions.error('Unable to load create new tree. Please try again later.'));
         }
     }
 
-    function success(tree: Tree): TreeAction {
-        return {type: TreeActionTypes.TREE_CREATE, tree};
+    function success(trees: Tree[]): TreeListAction {
+        return {type: TreeListActionTypes.TREE_ADD, trees};
     }
 }

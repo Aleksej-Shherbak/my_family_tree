@@ -6,13 +6,14 @@ import FamilyTreeItem from "./FamilyTreeItem";
 import {Link} from "react-router-dom";
 import {getRoutePathByName, routeNames} from "../../router/routes";
 import {AppDispatch} from "../../redux/RootReducer";
-import {TreeListState} from "../../redux/tree/TreeListReducer";
+import {TreesState} from "../../redux/tree/TreeReducer";
 import {IAppState} from "../../redux/AppStateTypes";
 import {getFileUrl} from "../../helpers/urlHelpers";
 
 const mapStateToProps = (state: IAppState) => state.trees;
 
-const FamilyTreeList: React.FC<TreeListState> = ({trees}) => {
+const FamilyTreeList: React.FC<TreesState> = ({trees}) => {
+    
     const dispatch: AppDispatch = useDispatch();
 
     useEffect(() => {
