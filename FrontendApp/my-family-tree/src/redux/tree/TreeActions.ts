@@ -20,7 +20,7 @@ function treeFetchList() {
             dispatch({type: TreeListTypes.REQUEST_STARTED});
             const res = await MakeRequest<Tree[]>(GET_TREE_LIST, 'GET');
             if (res !== null) {
-                dispatch({type: TreeListTypes.SET_TREE_LIST, payload: res.data});
+                dispatch({type: TreeListTypes.SET_LIST, payload: res.data});
                 dispatch({type: TreeListTypes.REQUEST_SUCCEEDED});
             }
         } catch (error) {

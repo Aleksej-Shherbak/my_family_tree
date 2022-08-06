@@ -21,7 +21,7 @@ export const TreeReducer: Reducer<TreesState, TTree> = (state: TreesState = init
             return {...state, isLoading: true}
         case TreeListTypes.REQUEST_SUCCEEDED:
             return {...state, isLoading: false, errorMessage: ''}
-        case TreeListTypes.SET_TREE_LIST:
+        case TreeListTypes.SET_LIST:
             return {...state, trees: action.payload}
         case TreeListTypes.REQUEST_FAILED:
             return {...state, errorMessage: action.payload}

@@ -5,7 +5,7 @@ export enum TreeListTypes {
     REQUEST_STARTED = 'TREE_LIST_REQUEST_STARTED',
     REQUEST_SUCCEEDED = 'TREE_LIST_REQUEST_SUCCEEDED',
     REQUEST_FAILED = 'TREE_LIST_REQUEST_FAILED',
-    SET_TREE_LIST = 'TREE_LIST_SET',
+    SET_LIST = 'TREE_LIST_SET',
 }
 
 export type TTreeList =
@@ -19,7 +19,7 @@ export type TTreeList =
     }
     |
     {
-        type: TreeListTypes.SET_TREE_LIST
+        type: TreeListTypes.SET_LIST
         payload: Tree[]
     }
     |
