@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {TreeListAction, TreeActionTypes} from "./TreeTypes";
+import {TTree, TreeTypes, TreeListTypes} from "./TreeTypes";
 import axios, {AxiosResponse} from "axios";
 import {alertActions} from "../alert/AlertActions";
 import {AlertAction} from "../alert/AlertTypes";
@@ -15,26 +15,26 @@ export const treeActions = {
 }
 
 function treeFetchList() {
-    return async (dispatch: Dispatch<TreeListAction | AlertAction>): Promise<void> => {
+    return async (dispatch: Dispatch<TTree | AlertAction>): Promise<void> => {
         try {
+            dispatch({type: TreeListTypes.REQUEST_STARTED});
             const res = await MakeRequest<Tree[]>(GET_TREE_LIST, 'GET');
             if (res !== null) {
-                dispatch(success(res.data));
+                dispatch({type: TreeListTypes.SET_TREE_LIST, payload: res.data});
+                dispatch({type: TreeListTypes.REQUEST_SUCCEEDED});
             }
         } catch (error) {
+            dispatch({type: TreeListTypes.REQUEST_FAILED, payload: 'Failed to load tree list'});
             console.error(error);
             await dispatch(alertActions.error('Unable to load trees. Please try again later.'));
         }
     }
-
-    function success(trees: Tree[]): TreeListAction {
-        return {type: TreeActionTypes.TREE_FETCH_LIST, trees}
-    }
 }
 
 function createTree(request: CreateTreeRequest) {
-    return async (dispatch: Dispatch<TreeListAction | AlertAction>): Promise<void> => {
+    return async (dispatch: Dispatch<TTree | AlertAction>): Promise<void> => {
         try {
+            dispatch({type: TreeTypes.REQUEST_STARTED});
             const bodyFormData = new FormData();
             if (request.image) {
                 bodyFormData.append('image', request.image)
@@ -46,14 +46,12 @@ function createTree(request: CreateTreeRequest) {
 
             const res = await axios.post<CreateTreeRequest, AxiosResponse<TreeResponse>>(`${BASE_URL}${CREATE_TREE}`, bodyFormData, {withCredentials: true});
             const tree: Tree = {...res.data}
-            dispatch(success([tree]));
+            dispatch({type: TreeTypes.ADD, payload: tree});
+            dispatch({type: TreeTypes.REQUEST_SUCCEEDED});
         } catch (error) {
+            dispatch({type: TreeTypes.REQUEST_FAILED, payload: 'Failed to create Tree.'})
             console.error(error);
             await dispatch(alertActions.error('Unable to load create new tree. Please try again later.'));
         }
-    }
-
-    function success(trees: Tree[]): TreeListAction {
-        return {type: TreeActionTypes.TREE_ADD, trees};
     }
 }
